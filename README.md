@@ -48,3 +48,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 1. [디자인UI/UX](https://www.bithumb.com/)
 2. [차트](https://react-chartjs-2.netlify.app/examples/line-chart)
 3. [리액트+웹소켓](https://jcon.tistory.com/186)
+4. [styled-component](https://dev.to/dank_programmer321/get-started-with-css-grids-react-styled-components-59pk)
