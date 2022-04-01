@@ -5,28 +5,28 @@
 
 ## 프로젝트 실행 방법
 
-### `1. npm install`
-### `2. npm start`
+1. `npm install`
+2. `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## 사용한 스택 목록
 
-### `1. javascript`
-### `2. html`
-### `3. css`
-### `4. react`
-### `5. styled-components`
-### `6. chartjs`
-### `7. react-chartjs-2`
+1. `javascript`
+2. `html`
+3. `css`
+4. `react`
+5. `styled-components`
+6. `chartjs`
+7. `react-chartjs-2`
 
 ## 구현한 기능 목록 (Software Requirement Specification)
 
-### 1. `코인에 대한 (오늘)정보 ex.현재가격, 시가, 종가, 거래량 등 표시`
-### 2. `호가 표시`
-### 3. `체결 내역 표시`
-### 4. `현재가를 기준으로 실시간 코인 가격 (그래프) 표시`
+1. `코인에 대한 (오늘)정보 ex.현재가격, 시가, 종가, 거래량 등 표시`
+2. `호가 표시`
+3. `체결 내역 표시`
+4. `현재가를 기준으로 실시간 코인 가격 (그래프) 표시`
 
 ## 성능 최적화에 대해서 고민하고 개선한 방법
 
@@ -35,10 +35,16 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## FAQ, 차후 개선책
 
-### 1. 속도가 느린점
+1. `속도가 느린점`
 - 데이터를 더 최적화
 
-### 2. 그래프 보기 힘든점
+2. `그래프 보기 힘든점`
 - 다양한 차트 라이브러리를 찾아보기
 
-### 3. 디자인이 별로인점
+3. `디자인이 별로인점`
+- 
+
+## 참고자료
+1. [디자인UI/UX](https://www.bithumb.com/)
+2. [차트](https://react-chartjs-2.netlify.app/examples/line-chart)
+3. [리액트+웹소켓](https://jcon.tistory.com/186)
