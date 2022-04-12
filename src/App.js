@@ -90,7 +90,7 @@ function App() {
       ws.current.onmessage = (e) => {
         const data = JSON.parse(e.data);
         if (data.type === 'ticker') {
-          console.log(currentPrice.datasets.data)
+          // console.log(currentPrice.datasets.data)
           setTicker(data.content)
           setCurrentPrice(prev => ({
             labels: [...prev.labels, ""].slice(-30),
@@ -171,6 +171,17 @@ function App() {
     }
   }, [socketConnected])
 
+  // 현재가 폴링
+  const publicAPIUrl = 'https://api.bithumb.com/public';
+  useEffect(() => {
+    setInterval(() => {
+      const orderCurrency = 'ALL';
+      const paymentCurrency = 'KRW'
+      fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`)
+      .then(res => res.json())
+      .then(res => console.log(res))
+    }, 3000);
+  }, [])
 
   return (
     <Container>
