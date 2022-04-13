@@ -62,6 +62,13 @@ function App() {
       },
     ],
   });
+  const [tmpChartData, setTmpChartData] = useState({
+    labels: [],
+    datasets: [{
+      label: '',
+      data: []
+    }]
+  })
 
   const webSocketUrl = 'wss://pubwss.bithumb.com/pub/ws';
   let ws = useRef(null);
@@ -179,15 +186,47 @@ function App() {
       const paymentCurrency = 'KRW'
       fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`)
       .then(res => res.json())
-      .then(res => console.log(res))
     }, 3000);
+  }, [])
+
+  let speedData = {
+    labels: ["0s", "10s", "20s", "30s", "40s", "50s", "60s"],
+    datasets: [{
+      label: "Car Speed (mph)",
+      data: [0, 59, 75, 20, 20, 55, 40]
+    }]
+  };
+
+
+  // 캔들스틱 가격 API 테스트
+  const candelstickAPIUrl = 'https://api.bithumb.com/public/candlestick'
+  const chartIntervals = '1m'
+  useEffect(() => {
+    fetch(`${candelstickAPIUrl}/BTC_KRW/${chartIntervals}`)
+    .then(res => res.json())
+    // .then(res => console.log(res))
+    .then(res => {
+      console.log('mydata', res.data[4])
+      if (res.data) {
+        setTmpChartData({
+          labels: res.data.map(info => `${new Date(info[0]).getHours()}:00`),
+          datasets: [{
+            label: 'TMPCHARTDATA',
+            data: res.data.map(info => info[2])
+          }]
+        })
+      }
+    })
   }, [])
 
   return (
     <Container>
       <NavBar>Bithumb x codestates coin market</NavBar>
       {/* 정보 */}
-      <Main><Line type="line" data={currentPrice} options={options} /></Main>
+      <Main>
+        {/* <Line type="line" data={currentPrice} options={options} /> */}
+        <Line type="line" data={tmpChartData} options={options}/>
+      </Main>
       <SideBar>
       {/* 호가 */}
       {Object.keys(orderbookdepth).length > 0 ? (
@@ -235,6 +274,7 @@ const NavBar = styled.nav`
   grid-area: nav;
   padding: 0.25rem;
 `;
+
 const Main = styled.main`
   /* background: #1f2128; */
   width: 60%;
