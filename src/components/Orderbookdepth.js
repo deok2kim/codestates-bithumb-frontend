@@ -36,13 +36,13 @@ const Orderbookdepth = ({orderbookdepth, orderbookdepthAskList, orderbookdepthBi
         </thead>
         <tbody>
           {Object.entries(orderbookdepthAskList).filter(o => o[1]).reverse().slice(-15).map((orderbookdepthAsk, idx) => ( orderbookdepthAsk[1] > 0 ? 
-            <tr key={idx} style={{ backgroundColor: 'skyblue'}}>
+            <tr key={orderbookdepthAsk[0]} style={{ backgroundColor: 'skyblue'}}>
               <td>{parseInt(orderbookdepthAsk[0]).toLocaleString('ko-KR', {maximumFractionDigits: 4} )}</td>
               <td>{parseFloat(orderbookdepthAsk[1]).toFixed(4)}</td>
             </tr>
           : ''))}
           {Object.entries(orderbookdepthBidList).filter(o => o[1] > 0).reverse().slice(0, 15).map((orderbookdepthBid, idx) => ( orderbookdepthBid[1] > 0 ?
-            <tr key={idx} style={{ backgroundColor: 'pink'}}>
+            <tr key={orderbookdepthBid[0]} style={{ backgroundColor: 'pink'}}>
               <td>{parseInt(orderbookdepthBid[0]).toLocaleString('ko-KR', {maximumFractionDigits: 4} )}</td>
               <td>{(orderbookdepthBid[1]).toFixed(4)}</td>
             </tr>

@@ -30,17 +30,27 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
+export const miniChartOptions = {
+  // responsive: true,
   plugins: {
+    legend: { // 타이틀 없애기
+      display: false,
+    }
   },
-  display: false,
-  elements: {
+  elements: { // 각 점 없애기
     point: {
-      radius: 0,
+      radius: 0.5,
     },
   },
-  animation: false,
+  animation: false, // 차트 그릴 때 애니메이션
+  scales: { // 스케일 x, y 없애기
+    y: {
+      display: false
+    },
+    x: {
+      display: false
+    }
+  }
 };
 
 function App() {
@@ -189,31 +199,25 @@ function App() {
     }, 3000);
   }, [])
 
-  let speedData = {
-    labels: ["0s", "10s", "20s", "30s", "40s", "50s", "60s"],
-    datasets: [{
-      label: "Car Speed (mph)",
-      data: [0, 59, 75, 20, 20, 55, 40]
-    }]
-  };
-
-
   // 캔들스틱 가격 API 테스트
   const candelstickAPIUrl = 'https://api.bithumb.com/public/candlestick'
-  const chartIntervals = '1m'
+  const chartIntervals = '10m'
   useEffect(() => {
     fetch(`${candelstickAPIUrl}/BTC_KRW/${chartIntervals}`)
     .then(res => res.json())
     // .then(res => console.log(res))
     .then(res => {
-      console.log('mydata', res.data[4])
+      console.log('mydata', res.data)
       if (res.data) {
+        const renderData = res.data.slice(-150).filter(info => new Date(info[0]).getMinutes() % 10 === 0);
         setTmpChartData({
-          labels: res.data.map(info => `${new Date(info[0]).getHours()}:00`),
+          labels: renderData.map(info => `${new Date(info[0]).getHours()}:${new Date(info[0]).getMinutes()}`),
           datasets: [{
             label: 'TMPCHARTDATA',
-            data: res.data.map(info => info[2])
-          }]
+            data: renderData.map(info => info[2]),
+            borderColor: 'rgb(53, 162, 235)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)'
+          }],
         })
       }
     })
@@ -225,7 +229,7 @@ function App() {
       {/* 정보 */}
       <Main>
         {/* <Line type="line" data={currentPrice} options={options} /> */}
-        <Line type="line" data={tmpChartData} options={options}/>
+        <Line type="line" data={tmpChartData} options={''}/>
       </Main>
       <SideBar>
       {/* 호가 */}
@@ -238,6 +242,7 @@ function App() {
       {Object.keys(ticker).length > 0 ? (
         <Ticker ticker={ticker} info24={info24} />
         ) : "" }
+        <Line type="line" data={tmpChartData} options={miniChartOptions}/>
       </Content1>
       <Content2>
       {/* 체결 내역 */}
