@@ -1,7 +1,11 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin-top: 30px;
+  height: 250px;
+  overflow: auto;
+`;
 
 const Table = styled.table`
   width: 400px;
