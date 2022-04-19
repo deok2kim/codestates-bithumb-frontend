@@ -283,6 +283,7 @@ const Container = styled.div`
     "footer footer footer footer";
   text-align: center;
   grid-gap: 0.25rem;
+  min-width: 90%;
 `;
 
 const NavBar = styled.nav`

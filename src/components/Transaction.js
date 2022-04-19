@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 const Container = styled.div`
   margin-top: 30px;
   height: 250px;
-  overflow: auto;
+  overflow: hidden;
 `;
 
 const Table = styled.table`
