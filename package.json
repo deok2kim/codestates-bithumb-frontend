@@ -43,5 +43,10 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://deok2kim.github.io/codestates-bithumb-frontend/"
+  "homepage": "https://deok2kim.github.io/codestates-bithumb-frontend/",
+  "devDependencies": {
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.6.2"
+  }
 }

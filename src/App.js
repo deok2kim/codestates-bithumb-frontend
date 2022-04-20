@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-
 // 라우터
-import { BrowserRouter, Routes, Route } from 'react-router-dom' ;
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import TradeOrder from './pages/TradeOrder';
 import NotFound from './components/NotFound';
@@ -28,92 +27,93 @@ import { useRef } from 'react';
 //   })
 // })();
 
-
 function App() {
-  const URL_NAME = 'codestates-bithumb-frontend'
-  const [tickers, setTickers] = useState([]);
-  // const [socketConnected, setSocketConnected] = useState(false)
+	const URL_NAME = 'codestates-bithumb-frontend';
+	const [tickers, setTickers] = useState([]);
+	// const [socketConnected, setSocketConnected] = useState(false)
 
-  // const WEB_SOCKET_URL = 'wss://pubwss.bithumb.com/pub/ws';
-  // let ws = useRef(null);
+	// const WEB_SOCKET_URL = 'wss://pubwss.bithumb.com/pub/ws';
+	// let ws = useRef(null);
 
-  // useEffect(() => {
-  //   if (!ws.current) {
-  //     ws.current = new WebSocket(WEB_SOCKET_URL);
-  //     ws.current.onopen = () => {
-  //       console.log(`CONNECTED TO ${WEB_SOCKET_URL}`);
-  //       setSocketConnected(true)
-  //     };
-  //     ws.current.onclose = (error) => {
-  //       console.log(`DISCONNECT from ${WEB_SOCKET_URL}`);
-  //       console.log(error)
-  //     }
-  //     ws.current.onmessage = (e) => {
-  //       const data = JSON.parse(e.data);
-  //       console.log(data);
-  //     }
-  //   }
-  //   return () => {
-  //     console.log("clean up");
-  //     ws.current.close();
-  //   }
-  // }, [])
-  
-  // useEffect(() => {
-  //   if (socketConnected) {
-  //     console.log('SEND');
-  //     const subscribeTickerParams = {
-  //       "type": "ticker",
-  //       "symbols": "ALL",
-  //       "tickTypes": ["MID", "24H"],
-  //     }
+	// useEffect(() => {
+	//   if (!ws.current) {
+	//     ws.current = new WebSocket(WEB_SOCKET_URL);
+	//     ws.current.onopen = () => {
+	//       console.log(`CONNECTED TO ${WEB_SOCKET_URL}`);
+	//       setSocketConnected(true)
+	//     };
+	//     ws.current.onclose = (error) => {
+	//       console.log(`DISCONNECT from ${WEB_SOCKET_URL}`);
+	//       console.log(error)
+	//     }
+	//     ws.current.onmessage = (e) => {
+	//       const data = JSON.parse(e.data);
+	//       console.log(data);
+	//     }
+	//   }
+	//   return () => {
+	//     console.log("clean up");
+	//     ws.current.close();
+	//   }
+	// }, [])
 
-  //     ws.current.send(
-  //       JSON.stringify(subscribeTickerParams)
-  //     )
-  //   }
-  // }, [socketConnected])
+	// useEffect(() => {
+	//   if (socketConnected) {
+	//     console.log('SEND');
+	//     const subscribeTickerParams = {
+	//       "type": "ticker",
+	//       "symbols": "ALL",
+	//       "tickTypes": ["MID", "24H"],
+	//     }
 
-    // 현재가 폴링
-  
-  const publicAPIUrl = 'https://api.bithumb.com/public';
-  useEffect(() => {
-    const orderCurrency = 'ALL';
-    const paymentCurrency = 'KRW';
-    fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`)
-    .then(res => res.json())
-    .then(res => setTickers(res.data))
-    setInterval(() => {
-      const orderCurrency = 'ALL';
-      const paymentCurrency = 'KRW';
-      fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`)
-      .then(res => res.json())
-      .then(res => setTickers(res.data))
-    }, 5000);
-  }, [])
+	//     ws.current.send(
+	//       JSON.stringify(subscribeTickerParams)
+	//     )
+	//   }
+	// }, [socketConnected])
 
-  // 필요한것
-  // 이름, 실시간(종가), 변동률, 거래금액(24h), 시가총액(optional)
-  /*
+	// 현재가 폴링
+
+	const publicAPIUrl = 'https://api.bithumb.com/public';
+	useEffect(() => {
+		const orderCurrency = 'ALL';
+		const paymentCurrency = 'KRW';
+		fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`)
+			.then(res => res.json())
+			.then(res => setTickers(res.data));
+		setInterval(() => {
+			const orderCurrency = 'ALL';
+			const paymentCurrency = 'KRW';
+			fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`)
+				.then(res => res.json())
+				.then(res => setTickers(res.data));
+		}, 5000);
+	}, []);
+
+	// 필요한것
+	// 이름, 실시간(종가), 변동률, 거래금액(24h), 시가총액(optional)
+	/*
     코인이름(심볼): {
       closing_price
       flucate_rate_24H
       acc_trade_value_24H
     }
   */
-  
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path={`${URL_NAME}/`} element={<Home tickers={tickers} />}>홈</Route>
-          {/* <Route path={`${URL_NAME}/trade_order/`} element={<TradeOrder />}>어웨이</Route> */}
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
-      </BrowserRouter>
-      {/* <TradeOrder /> */}
-    </>
-  )
+
+	return (
+		<>
+			<BrowserRouter>
+				<Routes>
+					<Route path={`${URL_NAME}/`} element={<Home tickers={tickers} />}>
+						홈
+					</Route>
+					{/* <Route path={`${URL_NAME}/trade_order/`} element={<TradeOrder />}>어웨이</Route> */}
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</BrowserRouter>
+			{/* <TradeOrder /> */}
+		</>
+	);
 }
 
 export default App;
