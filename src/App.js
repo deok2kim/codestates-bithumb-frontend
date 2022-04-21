@@ -10,6 +10,9 @@ import NotFound from './components/NotFound';
 import io from 'socket.io-client';
 import { useRef } from 'react';
 
+// css
+import GlobalStyles from './GlobalStyles';
+
 // const socket = io.connect('wss://pubwss.bithumb.com/pub/ws', {
 //   withCredentials: true,
 //   extraHeaders: {
@@ -102,12 +105,15 @@ function App() {
 
 	return (
 		<>
+			<GlobalStyles />
 			<BrowserRouter>
 				<Routes>
 					<Route path={`${URL_NAME}/`} element={<Home tickers={tickers} />}>
 						홈
 					</Route>
-					{/* <Route path={`${URL_NAME}/trade_order/`} element={<TradeOrder />}>어웨이</Route> */}
+					{/* <Route path={`${URL_NAME}/trade_order/`} element={<TradeOrder />}>
+						어웨이
+					</Route> */}
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>

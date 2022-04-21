@@ -1,56 +1,85 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function TopFive() {
-	const tmpDataList = [
-		{
-			name: '메탈',
-			price: 3886,
-			rate: 30.09,
-		},
-		{
-			name: '이피니티토큰',
-			price: 3886,
-			rate: 30.09,
-		},
-		{
-			name: '에이피엠코인',
-			price: 3886,
-			rate: 30.09,
-		},
-		{
-			name: '벨로프로토콜',
-			price: 3886,
-			rate: 30.09,
-		},
-		{
-			name: '위드',
-			price: 3886,
-			rate: 30.09,
-		},
-	];
+function TopFive({ topFiveTickers }) {
 	return (
-		<>
-			<h1>
-				마켓 변동률 TOP5
-				<button>원화 마켓</button>
-				<button>BTC 마켓</button>
-			</h1>
-			<TopFiveContainer>
-				{tmpDataList.map(info => (
-					<li key={info.name}>
-						<b>{info.name}</b>
-						<h2>{info.price}</h2>
-						<p>{info.rate}</p>
-					</li>
-				))}
-			</TopFiveContainer>
-		</>
+		<TopFiveArea>
+			<h2>마켓 변동률 TOP5</h2>
+			<button>원화 마켓</button>
+			<button>BTC 마켓</button>
+			<TopFiveContentWrap>
+				<TopFiveList>
+					{topFiveTickers.map(info => (
+						<li key={info.name}>
+							<div>
+								<Name>{info.name}</Name>
+								<Price color={info.color}>{info.closing_price}</Price>
+								<Rate color={info.color}>
+									{info.icon}
+									{info.fluctate_rate_24H} %
+								</Rate>
+								<div>________/''''''''\___</div>
+							</div>
+						</li>
+					))}
+				</TopFiveList>
+			</TopFiveContentWrap>
+		</TopFiveArea>
 	);
 }
 
 export default TopFive;
 
-const TopFiveContainer = styled.ul`
+const TopFiveArea = styled.div`
+	padding: 36px 0 10px;
+	text-align: center;
+
+	h2 {
+		margin-right: 20px;
+		font-size: 24px;
+		line-height: 36px;
+		font-weight: 500;
+		color: #1b1b1b;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	button {
+		border-radius: 4px 0 0 4px;
+		background-color: #444;
+		color: #fff;
+		border-color: #444;
+	}
+`;
+
+const TopFiveContentWrap = styled.div`
+	padding-top: 24px;
+`;
+
+const TopFiveList = styled.ul`
 	display: flex;
+	text-align: left;
+	li {
+		display: flex;
+		height: 120px;
+		flex: 0 0 20%;
+	}
+`;
+
+const Name = styled.p``;
+const Price = styled.p`
+	color: ${props => props.color};
+	font-size: 28px;
+	line-height: 33px;
+	font-weight: 500;
+	letter-spacing: 0;
+	margin: 5px 0 4px;
+`;
+
+const Rate = styled.p`
+	color: ${props => props.color};
+	font-size: 16px;
+	line-height: 17px;
+	font-weight: 400;
+	letter-spacing: 0;
 `;
