@@ -49,6 +49,15 @@ const TopFiveArea = styled.div`
 		background-color: #444;
 		color: #fff;
 		border-color: #444;
+		display: inline-block;
+		padding: 0 15px;
+		line-height: 28px;
+		min-width: 60px;
+		box-sizing: border-box;
+		background-color: #eee;
+		border: 1px solid #ddd;
+		color: #777;
+		font-size: 12px;
 	}
 `;
 

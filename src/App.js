@@ -111,9 +111,9 @@ function App() {
 					<Route path={`${URL_NAME}/`} element={<Home tickers={tickers} />}>
 						홈
 					</Route>
-					{/* <Route path={`${URL_NAME}/trade_order/`} element={<TradeOrder />}>
+					<Route path={`${URL_NAME}/trade_order/`} element={<TradeOrder />}>
 						어웨이
-					</Route> */}
+					</Route>
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>

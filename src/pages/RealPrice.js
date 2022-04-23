@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import RealPriceTable from '../components/RealPriceTable';
 
 function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, favoriteCoins }) {
 	// 한무 스크롤
@@ -40,21 +41,15 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 	return (
 		<RealPriceContiner>
 			<TabMarket>
-				<Ul>
-					<TabMarketLi>
-						<button onClick={() => onChangeMainCategory('krw')}>원화마켓</button>
-					</TabMarketLi>
-					<TabMarketLi>
-						<button onClick={() => onChangeMainCategory('favorite')}>즐겨찾기</button>
-					</TabMarketLi>
-				</Ul>
+				<button onClick={() => onChangeMainCategory('krw')}>원화마켓</button>
+				<button onClick={() => onChangeMainCategory('favorite')}>즐겨찾기</button>
 			</TabMarket>
-			<RealPriceTable>
+			<table>
 				<colgroup>
 					<col width="1%" />
-					<col width="3%" />
-					<col width="3%" />
-					<col width="3%" />
+					<col width="4%" />
+					<col width="4%" />
+					<col width="4%" />
 				</colgroup>
 				<thead>
 					<tr>
@@ -64,38 +59,14 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 						<th>거래금액(24h)</th>
 					</tr>
 				</thead>
-				<tbody>
-					{mainCategory === 'krw'
-						? tickers.slice(0, nextId.current).map(info => (
-								<tr key={info.name}>
-									<td>
-										<button onClick={() => addFavorite(info.name)}>
-											{favoriteCoins.includes(info.name) ? '🧡' : '🤍'}
-										</button>
-										{info.name}
-									</td>
-									<td>{info.closing_price}</td>
-									<td>{info.fluctate_rate_24H}</td>
-									<td>{info.fluctate_24H}</td>
-								</tr>
-						  ))
-						: tickers
-								.filter(info => favoriteCoins.includes(info.name))
-								.map(info => (
-									<tr key={info.name}>
-										<td>
-											<button onClick={() => addFavorite(info.name)}>
-												{favoriteCoins.includes(info.name) ? '🧡' : '🤍'}
-											</button>
-											{info.name}
-										</td>
-										<td>{info.closing_price}</td>
-										<td>{info.fluctate_rate_24H}</td>
-										<td>{info.fluctate_24H}</td>
-									</tr>
-								))}
-				</tbody>
-			</RealPriceTable>
+			</table>
+			<RealPriceTable
+				mainCategory={mainCategory}
+				tickers={tickers}
+				nextId={nextId}
+				favoriteCoins={favoriteCoins}
+				addFavorite={addFavorite}
+			/>
 			{onStopShowMore() ? <TargetElem ref={setTarget}>{isLoading && '🚗💨💨💨'}</TargetElem> : ''}
 		</RealPriceContiner>
 	);
@@ -107,30 +78,64 @@ const TargetElem = styled.div`
 	height: 100px;
 `;
 
-const RealPriceContiner = styled.div``;
+const RealPriceContiner = styled.div`
+	table {
+		th {
+			text-align: right;
+			&:first-child {
+				text-align: left;
+				padding-left: 35px;
+				padding-right: 0px;
+				p {
+					display: inline-block;
+					margin-left: 8px;
+					vertical-align: middle;
+				}
+			}
+			padding: 14px 15px 11px;
+			font-size: 14px;
+			line-height: 15px;
+			vertical-align: middle;
+			border-bottom: 1px solid #eee;
+			background-color: #f9f9f9;
+			position: relative;
+			min-height: 20px;
+			line-height: 19px;
+			padding-right: 15px;
+			vertical-align: middle;
+			cursor: pointer;
+		}
+		tr {
+			display: table-row;
+			cursor: pointer;
+			vertical-align: middle;
+		}
+	}
+`;
 
 const TabMarket = styled.div`
-	height: 5vh;
-	display: block;
-`;
+	/* height: 5vh; */
+	/* display: block; */
+	position: relative;
+	border-bottom: 1px solid #eee;
 
-const Ul = styled.div`
-	list-style: none;
-`;
-
-const TabMarketLi = styled.li`
-	margin: 0 0 0 0;
-	padding: 0 0 0 0;
-	border: 0;
-	float: left;
-`;
-
-const RealPriceTable = styled.table`
-	th,
-	td {
-		text-align: right;
-		&:first-child {
-			text-align: left;
-		}
+	&:first-child {
+		margin-left: 0;
+	}
+	button {
+		/* font-weight: 500; */
+		/* color: #1b1b1b; */
+		position: relative;
+		display: inline-block;
+		margin-right: 16px;
+		font-size: 20px;
+		line-height: 30px;
+		font-weight: 400;
+		padding: 12px 20px;
+		color: #777;
+		text-align: center;
+		cursor: pointer;
+		min-width: 70px;
+		box-sizing: border-box;
 	}
 `;

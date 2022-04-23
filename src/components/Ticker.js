@@ -53,26 +53,30 @@ const Ticker = ({ ticker, info24 }) => {
 			<CurrentPrice chgRate={chgRate}>{parseInt(prevClosePrice) + parseInt(chgAmt)}</CurrentPrice>
 			<ChgRate chgRate={chgRate}>{parseFloat(chgRate).toFixed(2)}%</ChgRate>
 			<Table>
-				<tr>
-					<th>거래량(24h)</th>
-					<td>
-						{parseFloat(volume).toFixed(4)} {symbol.split('_')[0]}
-					</td>
-					<th>고가(당일)</th>
-					<td>{parseInt(highPrice).toLocaleString('ko-KR', { maximumFractionDigits: 4 })}</td>
-				</tr>
-				<tr>
-					<th>거래금액(24h)</th>
-					<td>{(value / 100000000).toLocaleString('ko-KR', { maximumFractionDigits: 1 })} 억</td>
-					<th>저가(당일)</th>
-					<td>{parseInt(lowPrice).toLocaleString('ko-KR', { maximumFractionDigits: 4 })}</td>
-				</tr>
-				<tr>
-					<th>체결강도</th>
-					<td style={{ color: 'red' }}>{volumePower}%</td>
-					<th>전일종가</th>
-					<td>{parseInt(prevClosePrice).toLocaleString('ko-KR', { maximumFractionDigits: 4 })}</td>
-				</tr>
+				<tbody>
+					<tr>
+						<th>거래량(24h)</th>
+						<td>
+							{parseFloat(volume).toFixed(4)} {symbol.split('_')[0]}
+						</td>
+						<th>고가(당일)</th>
+						<td>{parseInt(highPrice).toLocaleString('ko-KR', { maximumFractionDigits: 4 })}</td>
+					</tr>
+					<tr>
+						<th>거래금액(24h)</th>
+						<td>{(value / 100000000).toLocaleString('ko-KR', { maximumFractionDigits: 1 })} 억</td>
+						<th>저가(당일)</th>
+						<td>{parseInt(lowPrice).toLocaleString('ko-KR', { maximumFractionDigits: 4 })}</td>
+					</tr>
+					<tr>
+						<th>체결강도</th>
+						<td style={{ color: 'red' }}>{volumePower}%</td>
+						<th>전일종가</th>
+						<td>
+							{parseInt(prevClosePrice).toLocaleString('ko-KR', { maximumFractionDigits: 4 })}
+						</td>
+					</tr>
+				</tbody>
 			</Table>
 		</Container>
 	);

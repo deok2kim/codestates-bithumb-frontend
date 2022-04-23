@@ -245,20 +245,11 @@ function TradeOrder() {
 			{/* 정보 */}
 			<Main>
 				{/* <Line type="line" data={currentPrice} options={options} /> */}
-				<Line type="line" data={tmpChartData} options="" />
+				{/* <Line type="line" data={tmpChartData} options="" /> */}
 			</Main>
-			<SideBar>
-				{/* 호가 */}
-				{Object.keys(orderbookdepth).length > 0 ? (
-					<Orderbookdepth
-						orderbookdepth={orderbookdepth}
-						orderbookdepthAskList={orderbookdepthAskList}
-						orderbookdepthBidList={orderbookdepthBidList}
-					/>
-				) : (
-					''
-				)}
-			</SideBar>
+			{/* <SideBar>
+
+			</SideBar> */}
 			<ContentBox>
 				<Content1>
 					{Object.keys(ticker).length > 0 ? <Ticker ticker={ticker} info24={info24} /> : ''}
@@ -268,8 +259,19 @@ function TradeOrder() {
 					{/* 체결 내역 */}
 					{transactions.length > 0 ? <Transaction transactions={transactions} /> : ''}
 				</Content1>
-				<Content2 />
-				<Content3 />
+				<Content2>
+					{/* 호가 */}
+					{Object.keys(orderbookdepth).length > 0 ? (
+						<Orderbookdepth
+							orderbookdepth={orderbookdepth}
+							orderbookdepthAskList={orderbookdepthAskList}
+							orderbookdepthBidList={orderbookdepthBidList}
+						/>
+					) : (
+						''
+					)}
+				</Content2>
+				{/* <Content3 /> */}
 			</ContentBox>
 			<Footer>김덕기(프론트엔드)</Footer>
 		</Container>
@@ -281,13 +283,22 @@ export default TradeOrder;
 const Container = styled.div`
 	display: grid;
 	height: 100vh;
+	width: 1200px;
 	color: white;
-	grid-template-rows: 1fr 1fr 0.5fr 1fr;
+	margin: auto;
+	/* grid-template-rows: 1fr 1fr 0.5fr 1fr; */
+	grid-template-rows: 0.2fr 2fr 1.25fr 1.25fr 0.2fr;
 	grid-template-areas:
-		'nav nav nav nav'
+		/* 'nav nav nav nav'
 		'sidebar main main main'
 		'sidebar content content content'
-		'footer footer footer footer';
+		'footer footer footer footer'; */
+		'nav nav nav'
+		'sidebar main main'
+		'sidebar content content'
+		'sidebar content content'
+		'footer footer footer';
+	grid-template-columns: 1fr 1fr 1fr;
 	text-align: center;
 	grid-gap: 0.25rem;
 	min-width: 90%;
@@ -301,7 +312,7 @@ const NavBar = styled.nav`
 
 const Main = styled.main`
 	/* background: #1f2128; */
-	width: 60%;
+	/* width: 60%; */
 	color: white;
 	grid-area: main;
 	padding: 1rem;
@@ -331,7 +342,7 @@ const Content1 = styled.div`
 	background: #a6b8b9;
 	padding: 0.25rem;
 	width: 100%;
-	height: 600px;
+	/* height: 600px; */
 	overflow-y: hidden;
 	overflow-x: hidden;
 `;
