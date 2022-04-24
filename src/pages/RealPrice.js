@@ -4,6 +4,7 @@ import RealPriceTable from '../components/RealPriceTable';
 
 function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, favoriteCoins }) {
 	// 한무 스크롤
+	console.log('Realprice', tickers);
 	const [target, setTarget] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const nextId = useRef(20);

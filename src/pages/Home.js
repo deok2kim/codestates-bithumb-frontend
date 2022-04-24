@@ -1,42 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
+import { fetchCoins } from '../api';
 import RealPrice from './RealPrice';
 import TopFive from './TopFive';
 
-const objToArr = (tickers, setArr) => {
-	setArr(Object.keys(tickers).map(name => ({ name, ...tickers[name] })));
-};
-
-function Home({ tickers }) {
-	const [tickersArr, setTickersArr] = useState([]);
-	const [topFiveList, setTopFiveList] = useState([]);
+function Home() {
+	const { isLoading, data: tickers } = useQuery(['allCoins'], () => fetchCoins('ALL', 'KRW'));
 	const [favoriteCoins, setFavoriteCoins] = useState([]);
 	const [mainCategory, setMainCategory] = useState('');
 
-	const getSortTopFive = tickersArr => {
-		const newTicker = [...tickersArr]
-			.sort((a, b) => b.fluctate_rate_24H - a.fluctate_rate_24H)
-			.splice(0, 5)
-			.map(function (data) {
-				let rate = parseFloat(data.fluctate_24H);
-				if (rate > 0) {
-					return { ...data, color: '#f75467', icon: '🔺' };
-				} else if (rate < 0) {
-					return { ...data, color: '#4386f9', icon: '🔻' };
-				} else {
-					return { ...data, color: '#444', icon: '' };
-				}
-			});
-		setTopFiveList(newTicker);
-		return newTicker;
-	};
 	useEffect(() => {
-		getSortTopFive(tickersArr);
-	}, [tickersArr]);
-
-	useEffect(() => {
-		objToArr(tickers, setTickersArr);
-	}, [tickers]);
+		setFavoriteCoins(JSON.parse(localStorage.getItem('favorite')));
+		setMainCategory(localStorage.getItem('mainCategory'));
+	}, []);
 
 	// 즐겨찾기
 	// const LOCALSTORAGE_FAVORITE_KEY = 'favorite'
@@ -52,57 +29,18 @@ function Home({ tickers }) {
 		setFavoriteCoins(JSON.parse(localStorage.getItem('favorite')));
 	};
 
-	useEffect(() => {
-		setFavoriteCoins(JSON.parse(localStorage.getItem('favorite')));
-		setMainCategory(localStorage.getItem('mainCategory'));
-	}, []);
-
 	// 카테고리 (원화 or 즐찾)
 	const onChangeMainCategory = category => {
 		setMainCategory(category);
 		localStorage.setItem('mainCategory', category);
 	};
 
-	// // 한무 스크롤
-	// const [target, setTarget] = useState(null);
-	// const [isLoading, setIsLoading] = useState(false);
-	// const nextId = useRef(10);
-
-	// const showMoreItems = async () => {
-	// 	setIsLoading(true);
-	// 	await new Promise(resolve => setTimeout(resolve, 300));
-	// 	nextId.current += 10;
-	// 	setIsLoading(false);
-	// };
-
-	// const onIntersect = async ([entry], observer) => {
-	// 	if (entry.isIntersecting && !isLoading) {
-	// 		observer.unobserve(entry.target);
-	// 		await showMoreItems();
-	// 		observer.observe(entry.target);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	let observer;
-	// 	if (target) {
-	// 		observer = new IntersectionObserver(onIntersect, {
-	// 			threshold: 0.4,
-	// 		});
-	// 		observer.observe(target);
-	// 	}
-	// 	return () => observer && observer.disconnect();
-	// }, [target]);
-
-	// const onStopShowMore = () => {
-	// 	return nextId.current < tickersArr.length;
-	// };
-
+	if (isLoading) return 'Loading...';
 	return (
 		<Container>
-			<TopFive topFiveTickers={topFiveList} />
+			<TopFive tickers={tickers} />
 			<RealPrice
-				tickers={tickersArr}
+				tickers={tickers}
 				mainCategory={mainCategory}
 				onChangeMainCategory={onChangeMainCategory}
 				addFavorite={addFavorite}

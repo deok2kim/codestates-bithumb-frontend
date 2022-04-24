@@ -5,57 +5,60 @@ import Orderbookdepth from '../components/Orderbookdepth';
 import Ticker from '../components/Ticker';
 import Transaction from '../components/Transaction';
 
-import {
-	Chart as ChartJS,
-	PointElement,
-	LineElement,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend,
-	CategoryScale,
-	LinearScale,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import CandlestickChart from '../components/CandlestickChart';
+import { useParams } from 'react-router-dom';
+// import {
+// 	Chart as ChartJS,
+// 	PointElement,
+// 	LineElement,
+// 	BarElement,
+// 	Title,
+// 	Tooltip,
+// 	Legend,
+// 	CategoryScale,
+// 	LinearScale,
+// } from 'chart.js';
+// import { Line } from 'react-chartjs-2';
 
-ChartJS.register(
-	CategoryScale,
-	LinearScale,
-	PointElement,
-	LineElement,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend,
-);
+// ChartJS.register(
+// 	CategoryScale,
+// 	LinearScale,
+// 	PointElement,
+// 	LineElement,
+// 	BarElement,
+// 	Title,
+// 	Tooltip,
+// 	Legend,
+// );
 
-export const miniChartOptions = {
-	// responsive: true,
-	plugins: {
-		legend: {
-			// 타이틀 없애기
-			display: false,
-		},
-	},
-	elements: {
-		// 각 점 없애기
-		point: {
-			radius: 0.5,
-		},
-	},
-	animation: false, // 차트 그릴 때 애니메이션
-	scales: {
-		// 스케일 x, y 없애기
-		y: {
-			display: false,
-		},
-		x: {
-			display: false,
-		},
-	},
-};
+// export const miniChartOptions = {
+// 	// responsive: true,
+// 	plugins: {
+// 		legend: {
+// 			// 타이틀 없애기
+// 			display: false,
+// 		},
+// 	},
+// 	elements: {
+// 		// 각 점 없애기
+// 		point: {
+// 			radius: 0.5,
+// 		},
+// 	},
+// 	animation: false, // 차트 그릴 때 애니메이션
+// 	scales: {
+// 		// 스케일 x, y 없애기
+// 		y: {
+// 			display: false,
+// 		},
+// 		x: {
+// 			display: false,
+// 		},
+// 	},
+// };
 
 function TradeOrder() {
+	const params = useParams();
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [ticker, setTicker] = useState({});
 	const [transactions, setTransaction] = useState([]);
@@ -233,29 +236,22 @@ function TradeOrder() {
 
 	return (
 		<Container>
-			<NavBar>
-				Bithumb x codestates coin market
-				{/* <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />}>홈</Route>
-            <Route path="/trade_order" element={<TradeOrder />}>트레이드</Route>
-          </Routes>
-        </BrowserRouter> */}
-			</NavBar>
+			<NavBar>Bithumb x codestates coin market</NavBar>
 			{/* 정보 */}
 			<Main>
-				{/* <Line type="line" data={currentPrice} options={options} /> */}
-				{/* <Line type="line" data={tmpChartData} options="" /> */}
+				<CandlestickChart
+					orderCurrency={params.coinId.split('_')[0]}
+					paymentCurrency={params.coinId.split('_')[1]}
+					chartIntervals="30m"
+				/>
 			</Main>
-			{/* <SideBar>
-
-			</SideBar> */}
+			<SideBar />
 			<ContentBox>
 				<Content1>
 					{Object.keys(ticker).length > 0 ? <Ticker ticker={ticker} info24={info24} /> : ''}
-					<div style={{ border: '1px solid black', padding: 0 }}>
+					{/* <div style={{ border: '1px solid black', padding: 0 }}>
 						<Line type="line" data={tmpChartData} options={miniChartOptions} height={50} />
-					</div>
+					</div> */}
 					{/* 체결 내역 */}
 					{transactions.length > 0 ? <Transaction transactions={transactions} /> : ''}
 				</Content1>

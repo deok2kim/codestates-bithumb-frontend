@@ -6,16 +6,13 @@ import Chart from 'react-apexcharts';
 import styled from 'styled-components';
 
 function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
-	const params = useParams();
-	console.log('chart', params);
 	const { isLoading, data } = useQuery(
 		['history', orderCurrency],
 		() => fetchCoinHistory(orderCurrency, paymentCurrency, chartIntervals),
 		{
-			refetchInterval: 50000,
+			refetchInterval: 10000,
 		},
 	);
-	console.log(data);
 	return (
 		<Container>
 			{isLoading ? (
@@ -46,11 +43,7 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 							background: 'transparent',
 						},
 						grid: { show: false },
-						theme: {
-							mode: 'dark',
-						},
 						stroke: {
-							// curve: 'smooth',
 							width: 1,
 						},
 						dataLabels: {
@@ -69,13 +62,8 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 							axisBorder: {
 								show: false,
 							},
-							// type: 'datetime',
-							// categories: data.data?.map(price => price[0]),
 						},
 						tooltip: {
-							// y: {
-							// 	formatter: value => `$${value.toFixed(2)}`,
-							// },
 							enabled: false,
 						},
 					}}

@@ -1,9 +1,32 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import CoinChart from '../components/CoinChart';
 
-function TopFive({ topFiveTickers }) {
-	console.log(topFiveTickers);
+function TopFive({ tickers }) {
+	const [topFiveTickers, setTopFiveTickers] = useState([]);
+	const getSortTopFive = tickers => {
+		const newTicker = [...tickers]
+			.sort((a, b) => b.fluctate_rate_24H - a.fluctate_rate_24H)
+			.splice(0, 5)
+			.map(function (data) {
+				let rate = parseFloat(data.fluctate_24H);
+				if (rate > 0) {
+					return { ...data, color: '#f75467', icon: '🔺' };
+				} else if (rate < 0) {
+					return { ...data, color: '#4386f9', icon: '🔻' };
+				} else {
+					return { ...data, color: '#444', icon: '' };
+				}
+			});
+		setTopFiveTickers(newTicker);
+		return newTicker;
+	};
+	useEffect(() => {
+		getSortTopFive(tickers);
+	}, [tickers]);
 	return (
 		<TopFiveArea>
 			<h2>마켓 변동률 TOP5</h2>
@@ -13,15 +36,17 @@ function TopFive({ topFiveTickers }) {
 				<TopFiveList>
 					{topFiveTickers.map(info => (
 						<li key={info.name}>
-							<div>
-								<Name>{info.name}</Name>
-								<Price color={info.color}>{info.closing_price}</Price>
-								<Rate color={info.color}>
-									{info.icon}
-									{info.fluctate_rate_24H} %
-								</Rate>
-								<CoinChart orderCurrency={info.name} paymentCurrency="KRW" chartIntervals="10m" />
-							</div>
+							<Link to={`${info.name}_KRW`}>
+								<div>
+									<Name>{info.name}</Name>
+									<Price color={info.color}>{info.closing_price}</Price>
+									<Rate color={info.color}>
+										{info.icon}
+										{info.fluctate_rate_24H} %
+									</Rate>
+									<CoinChart orderCurrency={info.name} paymentCurrency="KRW" chartIntervals="10m" />
+								</div>
+							</Link>
 						</li>
 					))}
 				</TopFiveList>
