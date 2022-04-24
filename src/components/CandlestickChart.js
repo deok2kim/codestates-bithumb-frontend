@@ -36,6 +36,9 @@ function CandlestickChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 									},
 								},
 							},
+							title: {
+								text: `${orderCurrency}/${paymentCurrency}`,
+							},
 							chart: {
 								type: 'candlestick',
 								height: 350,

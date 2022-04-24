@@ -7,55 +7,6 @@ import Transaction from '../components/Transaction';
 
 import CandlestickChart from '../components/CandlestickChart';
 import { useParams } from 'react-router-dom';
-// import {
-// 	Chart as ChartJS,
-// 	PointElement,
-// 	LineElement,
-// 	BarElement,
-// 	Title,
-// 	Tooltip,
-// 	Legend,
-// 	CategoryScale,
-// 	LinearScale,
-// } from 'chart.js';
-// import { Line } from 'react-chartjs-2';
-
-// ChartJS.register(
-// 	CategoryScale,
-// 	LinearScale,
-// 	PointElement,
-// 	LineElement,
-// 	BarElement,
-// 	Title,
-// 	Tooltip,
-// 	Legend,
-// );
-
-// export const miniChartOptions = {
-// 	// responsive: true,
-// 	plugins: {
-// 		legend: {
-// 			// 타이틀 없애기
-// 			display: false,
-// 		},
-// 	},
-// 	elements: {
-// 		// 각 점 없애기
-// 		point: {
-// 			radius: 0.5,
-// 		},
-// 	},
-// 	animation: false, // 차트 그릴 때 애니메이션
-// 	scales: {
-// 		// 스케일 x, y 없애기
-// 		y: {
-// 			display: false,
-// 		},
-// 		x: {
-// 			display: false,
-// 		},
-// 	},
-// };
 
 function TradeOrder() {
 	const params = useParams();
@@ -192,47 +143,47 @@ function TradeOrder() {
 		}
 	}, [socketConnected]);
 
-	// 현재가 폴링
-	const publicAPIUrl = 'https://api.bithumb.com/public';
-	useEffect(() => {
-		setInterval(() => {
-			const orderCurrency = 'ALL';
-			const paymentCurrency = 'KRW';
-			fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`).then(res => res.json());
-		}, 3000);
-	}, []);
+	// // 현재가 폴링
+	// const publicAPIUrl = 'https://api.bithumb.com/public';
+	// useEffect(() => {
+	// 	setInterval(() => {
+	// 		const orderCurrency = 'ALL';
+	// 		const paymentCurrency = 'KRW';
+	// 		fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`).then(res => res.json());
+	// 	}, 3000);
+	// }, []);
 
-	// 캔들스틱 가격 API 테스트
-	const candelstickAPIUrl = 'https://api.bithumb.com/public/candlestick';
-	const chartIntervals = '10m';
-	useEffect(() => {
-		fetch(`${candelstickAPIUrl}/BTC_KRW/${chartIntervals}`)
-			.then(res => res.json())
-			// .then(res => console.log(res))
-			.then(res => {
-				console.log('mydata', res.data);
-				if (res.data) {
-					const renderData = res.data
-						.slice(-150)
-						.filter(info => new Date(info[0]).getMinutes() % 10 === 0);
-					setTmpChartData({
-						labels: renderData.map(
-							info => `${new Date(info[0]).getHours()}:${new Date(info[0]).getMinutes()}`,
-						),
-						datasets: [
-							{
-								label: 'TMPCHARTDATA',
-								data: renderData.map(info => info[2]),
-								borderColor: 'rgb(53, 162, 235)',
-								backgroundColor: 'white',
-								fill: true,
-								borderWidth: 1.5,
-							},
-						],
-					});
-				}
-			});
-	}, []);
+	// // 캔들스틱 가격 API 테스트
+	// const candelstickAPIUrl = 'https://api.bithumb.com/public/candlestick';
+	// const chartIntervals = '10m';
+	// useEffect(() => {
+	// 	fetch(`${candelstickAPIUrl}/BTC_KRW/${chartIntervals}`)
+	// 		.then(res => res.json())
+	// 		// .then(res => console.log(res))
+	// 		.then(res => {
+	// 			console.log('mydata', res.data);
+	// 			if (res.data) {
+	// 				const renderData = res.data
+	// 					.slice(-150)
+	// 					.filter(info => new Date(info[0]).getMinutes() % 10 === 0);
+	// 				setTmpChartData({
+	// 					labels: renderData.map(
+	// 						info => `${new Date(info[0]).getHours()}:${new Date(info[0]).getMinutes()}`,
+	// 					),
+	// 					datasets: [
+	// 						{
+	// 							label: 'TMPCHARTDATA',
+	// 							data: renderData.map(info => info[2]),
+	// 							borderColor: 'rgb(53, 162, 235)',
+	// 							backgroundColor: 'white',
+	// 							fill: true,
+	// 							borderWidth: 1.5,
+	// 						},
+	// 					],
+	// 				});
+	// 			}
+	// 		});
+	// }, []);
 
 	return (
 		<Container>
@@ -278,9 +229,9 @@ export default TradeOrder;
 
 const Container = styled.div`
 	display: grid;
-	height: 100vh;
+	height: 120vh;
 	width: 1200px;
-	color: white;
+	/* color: white; */
 	margin: auto;
 	/* grid-template-rows: 1fr 1fr 0.5fr 1fr; */
 	grid-template-rows: 0.2fr 2fr 1.25fr 1.25fr 0.2fr;
@@ -294,10 +245,10 @@ const Container = styled.div`
 		'sidebar content content'
 		'sidebar content content'
 		'footer footer footer';
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1.2fr 0.8fr;
 	text-align: center;
-	grid-gap: 0.25rem;
-	min-width: 90%;
+	/* grid-gap: 0.3rem; */
+	/* min-width: 90%; */
 `;
 
 const NavBar = styled.nav`
@@ -327,20 +278,21 @@ const SideBar = styled.div`
 
 const ContentBox = styled.div`
 	display: flex;
-	gap: 0.25rem;
+	gap: 0.5rem;
 	/* padding: 0.25rem; */
 	align-items: center;
 	grid-area: content;
-	justify-content: center;
+	justify-content: space-around;
 `;
 
 const Content1 = styled.div`
-	background: #a6b8b9;
+	/* background: #a6b8b9; */
 	padding: 0.25rem;
-	width: 100%;
+	/* width: 100%; */
 	/* height: 600px; */
-	overflow-y: hidden;
+	/* overflow-y: scroll; */
 	overflow-x: hidden;
+	/* min-width: 600px; */
 `;
 const Content2 = styled(Content1)``;
 const Content3 = styled(Content1)``;
