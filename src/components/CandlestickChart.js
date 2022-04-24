@@ -80,33 +80,68 @@ function CandlestickChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 						]}
 						options={{
 							chart: {
-								height: 50,
+								// height: 50,
 								type: 'bar',
-								brush: {
-									enabled: true,
-									target: 'candles',
+								// brush: {
+								// 	enabled: true,
+								// 	target: 'candles',
+								// },
+								toolbar: {
+									show: false,
+								},
+							},
+							plotOptions: {
+								bar: {
+									// borderRadius: 10,
+									dataLabels: {
+										position: 'top', // top, center, bottom
+									},
 								},
 							},
 							dataLabels: {
 								enabled: false,
 							},
-
 							xaxis: {
-								show: false,
+								categories: [''],
+								// position: 'top',
+								// axisBorder: {
+								// 	show: false,
+								// },
+								// axisTicks: {
+								// 	show: false,
+								// },
+								// crosshairs: {
+								// 	fill: {
+								// 		type: 'gradient',
+								// 		gradient: {
+								// 			colorFrom: '#D8E3F0',
+								// 			colorTo: '#BED1E6',
+								// 			stops: [0, 100],
+								// 			opacityFrom: 0.4,
+								// 			opacityTo: 0.5,
+								// 		},
+								// 	},
+								// },
+								// tooltip: {
+								// 	enabled: false,
+								// },
 							},
 							yaxis: {
-								axisBorder: {
-									show: false,
-								},
-								axisTicks: {
-									show: false,
-								},
+								// axisBorder: {
+								// 	show: false,
+								// },
+								// axisTicks: {
+								// 	show: false,
+								// },
 								labels: {
 									show: true,
 									formatter: function (val) {
-										return val.toFixed(0);
+										return val.toFixed(4);
 									},
 								},
+							},
+							tooltip: {
+								enabled: false,
 							},
 						}}
 					/>

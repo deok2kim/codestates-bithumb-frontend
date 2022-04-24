@@ -3,13 +3,17 @@ import styled from 'styled-components';
 
 const Table = styled.table`
 	width: 250px;
-	height: 750px;
+	max-height: 750px;
 	tr {
 		margin: 1rem 0;
 		padding: 1rem 0;
 		td:first-child {
-			text-align: start;
+			text-align: end;
 			color: #f75467;
+
+			span + span {
+				padding: 0 15px;
+			}
 		}
 	}
 
@@ -22,11 +26,12 @@ const Table = styled.table`
 	}
 
 	td {
-		padding: 5px 10px;
+		padding: 5px 0;
 		/* height: 19px; */
 		/* line-height: 19px; */
 		font-weight: 400;
 		/* vertical-align: top; */
+		text-align: end;
 	}
 
 	tbody: {
@@ -60,11 +65,18 @@ const Orderbookdepth = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthB
 						orderbookdepthAsk[1] > 0 ? (
 							<tr key={orderbookdepthAsk[0]} style={{ backgroundColor: '#eef6ff' }}>
 								<td>
-									{parseInt(orderbookdepthAsk[0]).toLocaleString('ko-KR', {
+									<span>
+										{parseFloat(orderbookdepthAsk[0]).toLocaleString('ko-KR', {
+											maximumFractionDigits: 4,
+										})}
+									</span>
+									<span>-1.57%</span>
+								</td>
+								<td>
+									{parseFloat(orderbookdepthAsk[1]).toLocaleString('ko-KR', {
 										maximumFractionDigits: 4,
 									})}
 								</td>
-								<td>{parseFloat(orderbookdepthAsk[1]).toFixed(4)}</td>
 							</tr>
 						) : (
 							''
@@ -78,11 +90,18 @@ const Orderbookdepth = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthB
 						orderbookdepthBid[1] > 0 ? (
 							<tr key={orderbookdepthBid[0]} style={{ backgroundColor: '#fff0ef' }}>
 								<td>
-									{parseInt(orderbookdepthBid[0]).toLocaleString('ko-KR', {
+									<span>
+										{parseFloat(orderbookdepthBid[0]).toLocaleString('ko-KR', {
+											maximumFractionDigits: 4,
+										})}
+									</span>
+									<span>-3.74%</span>
+								</td>
+								<td>
+									{parseFloat(orderbookdepthBid[1]).toLocaleString('ko-KR', {
 										maximumFractionDigits: 4,
 									})}
 								</td>
-								<td>{orderbookdepthBid[1].toFixed(4)}</td>
 							</tr>
 						) : (
 							''

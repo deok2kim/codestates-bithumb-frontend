@@ -4,7 +4,7 @@ import { fetchCoinHistory } from '../api';
 import Chart from 'react-apexcharts';
 import styled from 'styled-components';
 
-function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
+function CoinActiveChart({ orderCurrency, paymentCurrency, chartIntervals, width, height }) {
 	const { isLoading, data } = useQuery(
 		['history', orderCurrency],
 		() => fetchCoinHistory(orderCurrency, paymentCurrency, chartIntervals),
@@ -14,23 +14,29 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 	);
 	return (
 		<Container>
+			<Title>
+				<p>차트</p>
+			</Title>
 			{isLoading ? (
 				'Loading...'
 			) : (
 				<Chart
+					width={width}
+					height={height}
 					type="area"
 					series={[
 						{
 							name: 'Price',
-							data: data.data?.slice(-200).map(price => price[2]),
+							data: data.data?.slice(-150).map(price => price[2]),
 						},
 					]}
 					options={{
-						colors: ['#a19696'],
+						colors: ['#4387f9'],
 						fill: {
 							type: 'solid',
-							colors: ['#eee'],
+							colors: ['#cbdefd'],
 						},
+						labels: data.data?.slice(-150).map(price => price[0] + 9 * 60 * 60 * 1000), // 한국시간 때문에 9시간 더해줌
 						chart: {
 							toolbar: {
 								show: false,
@@ -38,12 +44,12 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 							zoom: {
 								enabled: false,
 							},
-							width: '50%',
 							background: 'transparent',
 						},
 						grid: { show: false },
 						stroke: {
 							width: 1,
+							curve: 'straight',
 						},
 						dataLabels: {
 							enabled: false,
@@ -52,18 +58,16 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 							show: false,
 						},
 						xaxis: {
-							labels: {
-								show: false,
-							},
-							axisTicks: {
-								show: false,
-							},
-							axisBorder: {
-								show: false,
-							},
+							type: 'datetime',
 						},
 						tooltip: {
-							enabled: false,
+							y: {
+								formatter: value =>
+									`$${value.toLocaleString('ko-KR', { maximumFractionDigits: 4 })}`,
+							},
+							x: {
+								format: 'HH:mm',
+							},
 						},
 					}}
 				/>
@@ -72,10 +76,26 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 	);
 }
 
-export default CoinChart;
+export default CoinActiveChart;
 
 const Container = styled.div`
+	display: flex;
 	/* position: absolute; */
 	bottom: 30px;
 	left: -10px;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+`;
+
+const Title = styled.div`
+	padding: 0 30px;
+	width: 100%;
+	text-align: start;
+	font-size: 18px;
+	p {
+		border-bottom: 1px solid gray;
+		padding-bottom: 10px;
+		font-weight: bold;
+	}
 `;

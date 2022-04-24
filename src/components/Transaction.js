@@ -12,7 +12,7 @@ const Container = styled.div`
 		text-align: start;
 		font-weight: bold;
 		padding: 10px 0;
-		border-bottom: 1px solid black;
+		border-bottom: 1px solid gray;
 	}
 `;
 
@@ -21,28 +21,27 @@ const Table = styled.table`
 	margin: 15px 0;
 
 	tr {
-		/* margin: 1rem 0;
-		/* padding: 1rem 0; */
-		/* padding: 10px 0; */
-
-		/* vertical-align: middle; */
 		td:first-child {
 			text-align: start;
 		}
 		th:first-child {
 			text-align: start;
 		}
+		td,
+		th:last-child {
+			padding-right: 10px;
+		}
 	}
 
 	th {
 		color: gray;
 		text-align: end;
-		border-bottom: 1px solid black;
+		border-bottom: 1px solid gray;
 		padding-bottom: 10px;
 	}
 
 	td {
-		font-weight: bold;
+		/* font-weight: bold; */
 		text-align: end;
 		padding: 5px 0;
 	}

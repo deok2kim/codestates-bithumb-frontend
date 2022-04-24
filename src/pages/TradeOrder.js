@@ -7,9 +7,12 @@ import Transaction from '../components/Transaction';
 
 import CandlestickChart from '../components/CandlestickChart';
 import { useParams } from 'react-router-dom';
+import CoinChart from '../components/CoinChart';
+import CoinActiveChart from '../components/CoinActiveCahrt';
 
 function TradeOrder() {
 	const params = useParams();
+	const [orderCurreny, paymentCurrency] = params.coinId.split('_');
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [ticker, setTicker] = useState({});
 	const [transactions, setTransaction] = useState([]);
@@ -123,16 +126,16 @@ function TradeOrder() {
 
 			const subscribeTickerData = {
 				type: 'ticker',
-				symbols: ['BTC_KRW'],
+				symbols: [`${orderCurreny}_${paymentCurrency}`],
 				tickTypes: ['MID', '24H'],
 			};
 			const subscribeTransactionData = {
 				type: 'transaction',
-				symbols: ['BTC_KRW'],
+				symbols: [`${orderCurreny}_${paymentCurrency}`],
 			};
 			const subscribeOrderbookdepthData = {
 				type: 'orderbookdepth',
-				symbols: ['BTC_KRW'],
+				symbols: [`${orderCurreny}_${paymentCurrency}`],
 			};
 
 			ws.current.send(JSON.stringify(subscribeTickerData));
@@ -142,48 +145,6 @@ function TradeOrder() {
 			ws.current.send(JSON.stringify(subscribeOrderbookdepthData));
 		}
 	}, [socketConnected]);
-
-	// // 현재가 폴링
-	// const publicAPIUrl = 'https://api.bithumb.com/public';
-	// useEffect(() => {
-	// 	setInterval(() => {
-	// 		const orderCurrency = 'ALL';
-	// 		const paymentCurrency = 'KRW';
-	// 		fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`).then(res => res.json());
-	// 	}, 3000);
-	// }, []);
-
-	// // 캔들스틱 가격 API 테스트
-	// const candelstickAPIUrl = 'https://api.bithumb.com/public/candlestick';
-	// const chartIntervals = '10m';
-	// useEffect(() => {
-	// 	fetch(`${candelstickAPIUrl}/BTC_KRW/${chartIntervals}`)
-	// 		.then(res => res.json())
-	// 		// .then(res => console.log(res))
-	// 		.then(res => {
-	// 			console.log('mydata', res.data);
-	// 			if (res.data) {
-	// 				const renderData = res.data
-	// 					.slice(-150)
-	// 					.filter(info => new Date(info[0]).getMinutes() % 10 === 0);
-	// 				setTmpChartData({
-	// 					labels: renderData.map(
-	// 						info => `${new Date(info[0]).getHours()}:${new Date(info[0]).getMinutes()}`,
-	// 					),
-	// 					datasets: [
-	// 						{
-	// 							label: 'TMPCHARTDATA',
-	// 							data: renderData.map(info => info[2]),
-	// 							borderColor: 'rgb(53, 162, 235)',
-	// 							backgroundColor: 'white',
-	// 							fill: true,
-	// 							borderWidth: 1.5,
-	// 						},
-	// 					],
-	// 				});
-	// 			}
-	// 		});
-	// }, []);
 
 	return (
 		<Container>
@@ -203,6 +164,14 @@ function TradeOrder() {
 					{/* <div style={{ border: '1px solid black', padding: 0 }}>
 						<Line type="line" data={tmpChartData} options={miniChartOptions} height={50} />
 					</div> */}
+					{/* 미니 차트 */}
+					<CoinActiveChart
+						orderCurrency={orderCurreny}
+						paymentCurrency={paymentCurrency}
+						chartIntervals="10m"
+						width="420px"
+						height="150px"
+					/>
 					{/* 체결 내역 */}
 					{transactions.length > 0 ? <Transaction transactions={transactions} /> : ''}
 				</Content1>

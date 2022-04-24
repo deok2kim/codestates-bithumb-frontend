@@ -30,12 +30,10 @@ const Table = styled.table`
 	margin: 0 auto;
 
 	tr {
-		/* margin: 1rem 0;
-		padding: 1rem 0; */
-		/* display: flex; */
-		/* justify-content: space-between; */
-		/* gap: 20px; */
 		line-height: 20px;
+		td + th {
+			padding-left: 10px
+		}
 	}
 
 	th {
