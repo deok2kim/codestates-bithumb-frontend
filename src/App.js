@@ -13,6 +13,9 @@ import { useRef } from 'react';
 // css
 import GlobalStyles from './GlobalStyles';
 
+// 리액트 쿼리 데브툴스
+import { ReactQueryDevtools } from 'react-query/devtools';
+
 // const socket = io.connect('wss://pubwss.bithumb.com/pub/ws', {
 //   withCredentials: true,
 //   extraHeaders: {
@@ -90,7 +93,7 @@ function App() {
 			fetch(`${publicAPIUrl}/ticker/${orderCurrency}_${paymentCurrency}`)
 				.then(res => res.json())
 				.then(res => setTickers(res.data));
-		}, 5000);
+		}, 50000);
 	}, []);
 
 	// 필요한것
@@ -118,6 +121,7 @@ function App() {
 				</Routes>
 			</BrowserRouter>
 			{/* <TradeOrder /> */}
+			{/* <ReactQueryDevtools initialIsOpen={true} /> */}
 		</>
 	);
 }

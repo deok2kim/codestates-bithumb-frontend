@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import CoinChart from '../components/CoinChart';
 
 function TopFive({ topFiveTickers }) {
+	console.log(topFiveTickers);
 	return (
 		<TopFiveArea>
 			<h2>마켓 변동률 TOP5</h2>
@@ -18,7 +20,7 @@ function TopFive({ topFiveTickers }) {
 									{info.icon}
 									{info.fluctate_rate_24H} %
 								</Rate>
-								<div>________/''''''''\___</div>
+								<CoinChart orderCurrency={info.name} paymentCurrency="KRW" chartIntervals="10m" />
 							</div>
 						</li>
 					))}
@@ -33,6 +35,7 @@ export default TopFive;
 const TopFiveArea = styled.div`
 	padding: 36px 0 10px;
 	text-align: center;
+	padding-bottom: 70px;
 
 	h2 {
 		margin-right: 20px;
@@ -68,10 +71,18 @@ const TopFiveContentWrap = styled.div`
 const TopFiveList = styled.ul`
 	display: flex;
 	text-align: left;
+	gap: 12px;
 	li {
 		display: flex;
 		height: 120px;
 		flex: 0 0 20%;
+
+		div {
+			width: 95%;
+			/* height: 500px; */
+			position: relative;
+			cursor: pointer;
+		}
 	}
 `;
 

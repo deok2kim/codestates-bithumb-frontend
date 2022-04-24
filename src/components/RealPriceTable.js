@@ -64,6 +64,7 @@ function RealPriceTable({ mainCategory, tickers, nextId, favoriteCoins, addFavor
 }
 
 const Container = styled.table`
+	padding-top: 70px;
 	td {
 		text-align: right;
 		&:first-child {
