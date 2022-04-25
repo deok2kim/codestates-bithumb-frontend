@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { coinNames } from '../data/coinNameData';
 
-function RealPriceTable({ mainCategory, tickers, nextId, favoriteCoins, addFavorite }) {
+function RealPriceTable({ mainCategory, tickers, nextId, favoriteCoins, addFavorite, input }) {
 	const getRatePrice = (price, rate) => {
 		return parseFloat(price) * parseFloat(rate);
 	};
@@ -15,32 +17,34 @@ function RealPriceTable({ mainCategory, tickers, nextId, favoriteCoins, addFavor
 			</colgroup>
 			<tbody>
 				{mainCategory === 'krw'
-					? tickers.slice(0, nextId.current).map(info => (
-							<tr key={info.name}>
-								<td>
-									<button onClick={() => addFavorite(info.name)}>
-										{favoriteCoins.includes(info.name) ? '🧡' : '🤍'}
-									</button>
-									<p>
-										<a>
-											<strong>비트코인</strong>
+					? tickers.slice(0, nextId.current).map(info =>
+							coinNames[info.name].findName.includes(input.toUpperCase()) ? (
+								<tr key={info.name}>
+									<td>
+										<button onClick={() => addFavorite(info.name)}>
+											{favoriteCoins.includes(info.name) ? '🧡' : '🤍'}
+										</button>
+										<p>
+											<strong>{coinNames[info.name].koreanName}</strong>
 											<SmallText>{info.name}/KRW</SmallText>
-										</a>
-									</p>
-									<span />
-								</td>
-								<td>
-									<strong>{info.closing_price} 원</strong>
-								</td>
-								<td>
-									<div>
-										<strong>{getRatePrice(info.opening_price, info.fluctate_rate_24H)} 원</strong>
-										<strong>({info.fluctate_rate_24H} %)</strong>
-									</div>
-								</td>
-								<td>≈ {info.acc_trade_value_24H} 원</td>
-							</tr>
-					  ))
+										</p>
+										<span />
+									</td>
+									<td>
+										<strong>{info.closing_price} 원</strong>
+									</td>
+									<td>
+										<div>
+											<strong>{getRatePrice(info.opening_price, info.fluctate_rate_24H)} 원</strong>
+											<strong>({info.fluctate_rate_24H} %)</strong>
+										</div>
+									</td>
+									<td>≈ {info.acc_trade_value_24H} 원</td>
+								</tr>
+							) : (
+								''
+							),
+					  )
 					: tickers
 							.filter(info => favoriteCoins.includes(info.name))
 							.map(info => (
@@ -99,6 +103,7 @@ const Container = styled.table`
 		cursor: pointer;
 		vertical-align: middle;
 	}
+
 	button {
 		margin: 0;
 		padding: 0;

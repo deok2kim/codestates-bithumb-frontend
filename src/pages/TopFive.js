@@ -37,7 +37,7 @@ function TopFive({ tickers }) {
 					{topFiveTickers.map(info => (
 						<li key={info.name}>
 							<Link to={`${info.name}_KRW`}>
-								<div>
+								<DataWrapper>
 									<Name>{info.name}</Name>
 									<Price color={info.color}>{info.closing_price}</Price>
 									<Rate color={info.color}>
@@ -45,7 +45,7 @@ function TopFive({ tickers }) {
 										{info.fluctate_rate_24H} %
 									</Rate>
 									<CoinChart orderCurrency={info.name} paymentCurrency="KRW" chartIntervals="10m" />
-								</div>
+								</DataWrapper>
 							</Link>
 						</li>
 					))}
@@ -102,15 +102,21 @@ const TopFiveList = styled.ul`
 		height: 120px;
 		flex: 0 0 20%;
 
-		div {
-			width: 95%;
-			/* height: 500px; */
-			position: relative;
-			cursor: pointer;
+		a {
+			height: 150px;
 		}
 	}
 `;
 
+const DataWrapper = styled.div`
+	position: relative;
+	height: 200px;
+
+	div {
+		width: 95%;
+		position: relative;
+	}
+`;
 const Name = styled.p``;
 const Price = styled.p`
 	color: ${props => props.color};

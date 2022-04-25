@@ -9,6 +9,11 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 	const [isLoading, setIsLoading] = useState(false);
 	const nextId = useRef(20);
 
+	const [input, setInput] = useState('');
+	const onChange = e => {
+		setInput(e.target.value);
+	};
+
 	const showMoreItems = async () => {
 		setIsLoading(true);
 		await new Promise(resolve => setTimeout(resolve, 300));
@@ -44,6 +49,9 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 			<TabMarket>
 				<button onClick={() => onChangeMainCategory('krw')}>원화마켓</button>
 				<button onClick={() => onChangeMainCategory('favorite')}>즐겨찾기</button>
+				<InputWrapper>
+					<Input placeholder="검색" onChange={onChange} value={input} />
+				</InputWrapper>
 			</TabMarket>
 			<table>
 				<colgroup>
@@ -67,6 +75,7 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 				nextId={nextId}
 				favoriteCoins={favoriteCoins}
 				addFavorite={addFavorite}
+				input={input}
 			/>
 			{onStopShowMore() ? <TargetElem ref={setTarget}>{isLoading && '🚗💨💨💨'}</TargetElem> : ''}
 		</RealPriceContiner>
@@ -80,6 +89,7 @@ const TargetElem = styled.div`
 `;
 
 const RealPriceContiner = styled.div`
+	padding-top: 30px;
 	table {
 		th {
 			text-align: right;
@@ -139,4 +149,29 @@ const TabMarket = styled.div`
 		min-width: 70px;
 		box-sizing: border-box;
 	}
+`;
+
+const InputWrapper = styled.span`
+	position: absolute;
+	top: 10;
+	right: 0;
+`;
+
+const Input = styled.input`
+	/* display: block; */
+	/* width: 100%; */
+	height: 40px;
+	padding: 0 12px;
+	/* border: 1px solid #eee; */
+	border-radius: 4px;
+	font-size: 14px;
+	line-height: 21px;
+	font-weight: 400;
+	letter-spacing: 0;
+	/* background-color: #f9f9f9; */
+	outline: 0;
+	/* color: #777; */
+	border: 1px solid #e5e5e5;
+	background-color: #fafafa;
+	color: #1b1b1b;
 `;
