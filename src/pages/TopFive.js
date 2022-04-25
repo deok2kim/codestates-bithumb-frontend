@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import CoinChart from '../components/CoinChart';
 
 function TopFive({ tickers }) {
+	console.log('TOPFIVE');
 	const [topFiveTickers, setTopFiveTickers] = useState([]);
 	const getSortTopFive = tickers => {
 		const newTicker = [...tickers]
@@ -26,6 +27,7 @@ function TopFive({ tickers }) {
 	};
 	useEffect(() => {
 		getSortTopFive(tickers);
+		console.log('useEffect, sort');
 	}, [tickers]);
 	return (
 		<TopFiveArea>
@@ -39,7 +41,11 @@ function TopFive({ tickers }) {
 							<Link to={`${info.name}_KRW`}>
 								<DataWrapper>
 									<Name>{info.name}</Name>
-									<Price color={info.color}>{info.closing_price}</Price>
+									<Price color={info.color}>
+										{parseFloat(info.closing_price).toLocaleString('ko-KR', {
+											maximumFractionDigits: 4,
+										})}
+									</Price>
 									<Rate color={info.color}>
 										{info.icon}
 										{info.fluctate_rate_24H} %
@@ -55,7 +61,8 @@ function TopFive({ tickers }) {
 	);
 }
 
-export default TopFive;
+// export default TopFive;
+export default React.memo(TopFive);
 
 const TopFiveArea = styled.div`
 	padding: 36px 0 10px;

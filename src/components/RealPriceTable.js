@@ -1,67 +1,61 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { coinNames } from '../data/coinNameData';
+import CoinItem from './CoinItem';
 
-function RealPriceTable({ mainCategory, tickers, nextId, favoriteCoins, addFavorite, input }) {
-	const getRatePrice = (price, rate) => {
+function RealPriceTable({ mainCategory, tickers, nextId, favoriteCoins, toggleFavorite, input }) {
+	const [myfavoriteCoins, setMyFavoriteCoins] = useState([]);
+	console.log('ReaclPriceTable');
+	const getRatePrice = useCallback((price, rate) => {
 		return parseFloat(price) * parseFloat(rate);
-	};
+	}, []);
+
+	useEffect(() => {
+		setMyFavoriteCoins(tickers.filter(coin => favoriteCoins.includes(coin.name)));
+	}, [tickers, favoriteCoins]);
+
 	return (
 		<Container>
 			<colgroup>
-				<col width="1%" />
+				<col width="4%" />
 				<col width="2%" />
-				<col width="2%" />
-				<col width="2%" />
+				<col width="4%" />
+				<col width="4%" />
 			</colgroup>
 			<tbody>
 				{mainCategory === 'krw'
-					? tickers.slice(0, nextId.current).map(info =>
-							coinNames[info.name].findName.includes(input.toUpperCase()) ? (
-								<tr key={info.name}>
-									<td>
-										<button onClick={() => addFavorite(info.name)}>
-											{favoriteCoins.includes(info.name) ? '🧡' : '🤍'}
-										</button>
-										<p>
-											<strong>{coinNames[info.name].koreanName}</strong>
-											<SmallText>{info.name}/KRW</SmallText>
-										</p>
-										<span />
-									</td>
-									<td>
-										<strong>{info.closing_price} 원</strong>
-									</td>
-									<td>
-										<div>
-											<strong>{getRatePrice(info.opening_price, info.fluctate_rate_24H)} 원</strong>
-											<strong>({info.fluctate_rate_24H} %)</strong>
-										</div>
-									</td>
-									<td>≈ {info.acc_trade_value_24H} 원</td>
-								</tr>
+					? tickers
+							?.slice(0, nextId.current)
+							.map(coin =>
+								coinNames[coin.name].findName.includes(input.toUpperCase()) ? (
+									<CoinItem
+										key={coin.name}
+										coin={coin}
+										toggleFavorite={toggleFavorite}
+										favoriteCoins={favoriteCoins}
+										getRatePrice={getRatePrice}
+									/>
+								) : (
+									''
+								),
+							)
+					: myfavoriteCoins.map(coin =>
+							coinNames[coin.name].findName.includes(input.toUpperCase()) ? (
+								<CoinItem
+									key={coin.name}
+									coin={coin}
+									toggleFavorite={toggleFavorite}
+									favoriteCoins={favoriteCoins}
+									getRatePrice={getRatePrice}
+								/>
 							) : (
 								''
 							),
-					  )
-					: tickers
-							.filter(info => favoriteCoins.includes(info.name))
-							.map(info => (
-								<tr key={info.name}>
-									<td>
-										<div>
-											<button onClick={() => addFavorite(info.name)}>
-												{favoriteCoins.includes(info.name) ? '🧡' : '🤍'}
-											</button>
-											{info.name}
-										</div>
-									</td>
-									<td>{info.closing_price} 원</td>
-									<td>{info.fluctate_rate_24H}</td>
-									<td>≈ {info.fluctate_24H} 원</td>
-								</tr>
-							))}
+					  )}
 			</tbody>
 		</Container>
 	);
@@ -69,51 +63,5 @@ function RealPriceTable({ mainCategory, tickers, nextId, favoriteCoins, addFavor
 
 const Container = styled.table`
 	padding-top: 70px;
-	td {
-		text-align: right;
-		&:first-child {
-			text-align: left;
-			padding-left: 10px;
-			padding-right: 0px;
-			p {
-				display: inline-block;
-				/* margin-left: 22px; */
-				margin-left: 8px;
-				vertical-align: middle;
-			}
-		}
-		padding: 14px 15px 11px;
-		font-size: 14px;
-		line-height: 15px;
-		vertical-align: middle;
-		border-bottom: 1px solid #eee;
-
-		div {
-			position: relative;
-		}
-
-		strong {
-			display: inline-block;
-			line-height: 20px;
-			font-weight: 400;
-		}
-	}
-	tr {
-		display: table-row;
-		cursor: pointer;
-		vertical-align: middle;
-	}
-
-	button {
-		margin: 0;
-		padding: 0;
-	}
-`;
-
-const SmallText = styled.span`
-	display: block;
-	color: #a4a4a4;
-	font-size: 12px;
-	line-height: 18px;
 `;
 export default RealPriceTable;

@@ -1,33 +1,65 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useCallback } from 'react';
 import styled from 'styled-components';
 import RealPriceTable from '../components/RealPriceTable';
 
-function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, favoriteCoins }) {
+function RealPrice({ tickers }) {
 	// 한무 스크롤
-	console.log('Realprice', tickers);
+	console.log('Realprice');
 	const [target, setTarget] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
-	const nextId = useRef(20);
+	const [favoriteCoins, setFavoriteCoins] = useState([]);
+	const [mainCategory, setMainCategory] = useState('krw');
+	const nextId = useRef(50);
+
+	useEffect(() => {
+		console.log('생성될때 한번번');
+		setFavoriteCoins(JSON.parse(localStorage.getItem('favorite')));
+	}, []);
 
 	const [input, setInput] = useState('');
-	const onChange = e => {
+	const onChange = useCallback(e => {
 		setInput(e.target.value);
-	};
+	}, []);
 
-	const showMoreItems = async () => {
+	const showMoreItems = useCallback(async () => {
 		setIsLoading(true);
 		await new Promise(resolve => setTimeout(resolve, 300));
 		nextId.current += 10;
 		setIsLoading(false);
-	};
+	}, []);
 
-	const onIntersect = async ([entry], observer) => {
-		if (entry.isIntersecting && !isLoading) {
-			observer.unobserve(entry.target);
-			await showMoreItems();
-			observer.observe(entry.target);
+	const onIntersect = useCallback(
+		async ([entry], observer) => {
+			if (entry.isIntersecting && !isLoading) {
+				observer.unobserve(entry.target);
+				await showMoreItems();
+				observer.observe(entry.target);
+			}
+		},
+		[isLoading, showMoreItems],
+	);
+
+	// 즐겨찾기
+	// const LOCALSTORAGE_FAVORITE_KEY = 'favorite'
+	const toggleFavorite = useCallback(symbol => {
+		console.log('toggle');
+		const favoriteCoinsInLocalStorage = JSON.parse(localStorage.getItem('favorite') || '[]');
+		const indexInFavoriteCoins = favoriteCoinsInLocalStorage.indexOf(symbol);
+		if (indexInFavoriteCoins >= 0) {
+			favoriteCoinsInLocalStorage.splice(indexInFavoriteCoins, 1);
+			localStorage.setItem('favorite', JSON.stringify(favoriteCoinsInLocalStorage));
+		} else {
+			localStorage.setItem('favorite', JSON.stringify([symbol, ...favoriteCoinsInLocalStorage]));
 		}
-	};
+		setFavoriteCoins(JSON.parse(localStorage.getItem('favorite')));
+	}, []);
+
+	// 카테고리 (원화 or 즐찾)
+	const onChangeMainCategory = useCallback(category => {
+		setMainCategory(category);
+		localStorage.setItem('mainCategory', category);
+	}, []);
 
 	useEffect(() => {
 		let observer;
@@ -38,7 +70,7 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 			observer.observe(target);
 		}
 		return () => observer && observer.disconnect();
-	}, [target]);
+	}, [target, onIntersect]);
 
 	const onStopShowMore = () => {
 		return nextId.current < tickers.length;
@@ -55,8 +87,8 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 			</TabMarket>
 			<table>
 				<colgroup>
-					<col width="1%" />
 					<col width="4%" />
+					<col width="2%" />
 					<col width="4%" />
 					<col width="4%" />
 				</colgroup>
@@ -74,7 +106,7 @@ function RealPrice({ tickers, mainCategory, onChangeMainCategory, addFavorite, f
 				tickers={tickers}
 				nextId={nextId}
 				favoriteCoins={favoriteCoins}
-				addFavorite={addFavorite}
+				toggleFavorite={toggleFavorite}
 				input={input}
 			/>
 			{onStopShowMore() ? <TargetElem ref={setTarget}>{isLoading && '🚗💨💨💨'}</TargetElem> : ''}

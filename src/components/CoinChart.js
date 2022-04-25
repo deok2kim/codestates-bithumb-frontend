@@ -9,13 +9,13 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 		['history', orderCurrency],
 		() => fetchCoinHistory(orderCurrency, paymentCurrency, chartIntervals),
 		{
-			refetchInterval: 10000,
+			refetchInterval: 600000,
 		},
 	);
 	return (
 		<Container>
 			{isLoading ? (
-				'Loading...'
+				''
 			) : (
 				<Chart
 					type="area"
