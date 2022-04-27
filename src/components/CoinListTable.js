@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import styled from 'styled-components';
 import { coinNames } from '../data/coinNameData';
 import CoinItem from './CoinItem';
+import { NoCoins } from './Error';
 
 function RealPriceTable({
 	mainCategory,
@@ -17,6 +18,8 @@ function RealPriceTable({
 }) {
 	const [myfavoriteCoins, setMyFavoriteCoins] = useState([]);
 	const [displayCoins, setDisplayCoins] = useState([]);
+	const [searchedCoins, setSearchedCoins] = useState([]);
+	const [searchedFavoriteCoins, setSearchedFavoriteCoins] = useState([]);
 
 	const getRatePrice = useCallback((price, rate) => {
 		return parseFloat(price) * parseFloat(rate);
@@ -70,24 +73,37 @@ function RealPriceTable({
 					acc_trade_value_24H: parseInt(coins[coin].acc_trade_value_24H).toLocaleString('ko-KR', {
 						maximumFractionDigits: 4,
 					}),
-				})),
+					accSort: parseInt(coins[coin].acc_trade_value_24H),
+				}))
+				.sort((a, b) => b.accSort - a.accSort),
 		);
 	}, [realRate, coins, favoriteCoins]);
 
 	useEffect(() => {
 		setCoins();
 	}, [coins, favoriteCoins, setCoins]);
+
+	useEffect(() => {
+		setSearchedCoins(
+			displayCoins.filter(coin => coinNames[coin.symbol].findName.includes(input.toUpperCase())),
+		);
+		setSearchedFavoriteCoins(
+			myfavoriteCoins.filter(coin => coinNames[coin.symbol].findName.includes(input.toUpperCase())),
+		);
+	}, [input]);
+	console.log(displayCoins);
 	return (
-		<Container>
-			<colgroup>
-				<col width="4%" />
-				<col width="2%" />
-				<col width="4%" />
-				<col width="4%" />
-			</colgroup>
-			<tbody>
-				{mainCategory === 'krw'
-					? displayCoins
+		<>
+			<Container>
+				<colgroup>
+					<col width="4%" />
+					<col width="2%" />
+					<col width="4%" />
+					<col width="4%" />
+				</colgroup>
+				<tbody>
+					{mainCategory === 'krw' &&
+						displayCoins
 							.slice(0, nextId.current)
 							.map(coin =>
 								coinNames[coin.symbol].findName.includes(input.toUpperCase()) ? (
@@ -101,8 +117,10 @@ function RealPriceTable({
 								) : (
 									''
 								),
-							)
-					: myfavoriteCoins.map(coin =>
+							)}
+
+					{mainCategory === 'favorite' &&
+						myfavoriteCoins.map(coin =>
 							coinNames[coin.symbol].findName.includes(input.toUpperCase()) ? (
 								<CoinItem
 									key={coin.symbol}
@@ -114,9 +132,19 @@ function RealPriceTable({
 							) : (
 								''
 							),
-					  )}
-			</tbody>
-		</Container>
+						)}
+				</tbody>
+			</Container>
+			{mainCategory === 'krw' && searchedCoins.length === 0 && (
+				<NoCoins msg="찾는 코인이 없습니다.😢" />
+			)}
+			{mainCategory === 'favorite' && myfavoriteCoins.length === 0 && (
+				<NoCoins msg="즐겨찾는 코인이 없습니다.😢" />
+			)}
+			{mainCategory === 'favorite' &&
+				myfavoriteCoins.length > 0 &&
+				searchedFavoriteCoins.length === 0 && <NoCoins msg="찾는 코인이 없습니다.😢" />}
+		</>
 	);
 }
 

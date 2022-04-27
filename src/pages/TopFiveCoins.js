@@ -8,24 +8,20 @@ import CoinChart from '../components/CoinChart';
 import { coinNames } from '../data/coinNameData';
 
 function TopFiveCoins({ coins }) {
-	console.log('TOPFIVE');
 	const [topFiveCoins, setTopFiveCoins] = useState([]);
 
 	const realRate = useCallback((op, cp) => {
+		if (parseFloat(op) === 0) {
+			return 0;
+		}
 		return ((parseFloat(cp) - parseFloat(op)) / parseFloat(op)) * 100;
 	}, []);
 
 	const sort = useCallback(() => {
 		const topFiveCoinsKeys = Object.keys(coins).sort(function (a, b) {
 			parseFloat();
-			const rateA =
-				((parseFloat(coins[a].closing_price) - parseFloat(coins[a].opening_price)) /
-					parseFloat(coins[a].opening_price)) *
-				100;
-			const rateB =
-				((parseFloat(coins[b].closing_price) - parseFloat(coins[b].opening_price)) /
-					parseFloat(coins[b].opening_price)) *
-				100;
+			const rateA = realRate(coins[a].opening_price, coins[a].closing_price);
+			const rateB = realRate(coins[b].opening_price, coins[b].closing_price);
 			return rateB - rateA;
 		});
 		setTopFiveCoins(

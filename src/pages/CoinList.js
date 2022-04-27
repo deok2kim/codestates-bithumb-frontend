@@ -29,7 +29,6 @@ function CoinList({ coins }) {
 	const onIntersect = useCallback(
 		async ([entry], observer) => {
 			if (entry.isIntersecting && !isLoading) {
-				console.log('한무');
 				observer.unobserve(entry.target);
 				await showMoreItems();
 				observer.observe(entry.target);
