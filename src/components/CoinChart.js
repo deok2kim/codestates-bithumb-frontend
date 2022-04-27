@@ -72,10 +72,9 @@ function CoinChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 	);
 }
 
-export default CoinChart;
+export default React.memo(CoinChart);
 
 const Container = styled.div`
-	/* position: absolute; */
 	bottom: 30px;
 	left: -10px;
 `;

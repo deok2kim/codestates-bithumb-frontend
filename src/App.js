@@ -21,12 +21,10 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path={`${URL_NAME}`} element={<Home />} />
-					<Route path={`${URL_NAME}/trade_order`} element={<TradeOrder />} />
-					<Route path={`${URL_NAME}/:coinId`} element={<TradeOrder />} />
+					<Route path={`${URL_NAME}/trade_order/:coinId`} element={<TradeOrder />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>
-			{/* <TradeOrder /> */}
 			{/* <ReactQueryDevtools initialIsOpen={true} /> */}
 		</>
 	);

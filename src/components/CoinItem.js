@@ -1,59 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { coinNames } from '../data/coinNameData';
 
 function CoinItem({ coin, toggleFavorite, favoriteCoins, getRatePrice }) {
 	return (
-		<CoinWrapper key={coin.name}>
+		<CoinWrapper>
 			<CoinTitle>
-				<FavoriteButton onClick={() => toggleFavorite(coin.name)}>
-					{favoriteCoins.includes(coin.name) ? '🧡' : '🤍'}
+				<FavoriteButton onClick={() => toggleFavorite(coin.symbol)}>
+					{favoriteCoins.includes(coin.symbol) ? '🧡' : '🤍'}
 				</FavoriteButton>
-				<Link to={`${coin.name}_KRW`}>
+				<Link to={`trade_order/${coin.symbol}_KRW`}>
 					<p>
-						<strong>{coinNames[coin.name].koreanName}</strong>
-						<SmallText>{coin.name}/KRW</SmallText>
+						<strong>{coin.name}</strong>
+						<SmallText>{coin.symbol}/KRW</SmallText>
 					</p>
 				</Link>
 				<span />
 			</CoinTitle>
 			<RealTimePrice>
-				<strong>
-					{parseFloat(coin.closing_price).toLocaleString('ko-KR', {
-						maximumFractionDigits: 4,
-					})}{' '}
-					원
-				</strong>
+				<strong>{coin.closing_price} 원ㅤ</strong>
 			</RealTimePrice>
-			<Rate>
+			<Rate color={coin.fluctate_rate_24H}>
 				<div>
+					<strong>{coin.fluctate_24H} 원</strong>
 					<strong>
-						{getRatePrice(coin.opening_price, coin.fluctate_rate_24H).toLocaleString('ko-KR', {
-							maximumFractionDigits: 4,
-						})}{' '}
-						원
-					</strong>
-					<strong>
-						(
-						{parseFloat(coin.fluctate_rate_24H) > 0
-							? `+${coin.fluctate_rate_24H}`
-							: coin.fluctate_rate_24H}{' '}
-						%)
+						({coin.fluctate_rate_24H > 0 ? `+${coin.fluctate_rate_24H}` : coin.fluctate_rate_24H} %)
 					</strong>
 				</div>
 			</Rate>
-			<Amount>
-				≈{' '}
-				{
-					parseFloat(coin.acc_trade_value_24H)
-						.toLocaleString('ko-KR', {
-							maximumFractionDigits: 4,
-						})
-						.split('.')[0]
-				}{' '}
-				원
-			</Amount>
+			<Amount>≈ {coin.acc_trade_value_24H} 원</Amount>
 		</CoinWrapper>
 	);
 }
@@ -69,7 +44,6 @@ const SmallText = styled.span`
 
 const CoinWrapper = styled.tr`
 	display: table-row;
-	/* cursor: pointer; */
 	vertical-align: middle;
 `;
 
@@ -108,5 +82,7 @@ const FavoriteButton = styled.button`
 `;
 
 const RealTimePrice = styled(Td)``;
-const Rate = styled(Td)``;
+const Rate = styled(Td)`
+	color: ${props => (props.color > 0 ? 'red' : 'blue')};
+`;
 const Amount = styled(Td)``;

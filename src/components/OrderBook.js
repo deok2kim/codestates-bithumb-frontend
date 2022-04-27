@@ -18,7 +18,6 @@ const Table = styled.table`
 	}
 
 	th {
-		/* color: gray; */
 		text-align: center;
 		padding: 10px;
 		border-top: 1px solid #eee;
@@ -27,10 +26,7 @@ const Table = styled.table`
 
 	td {
 		padding: 5px 0;
-		/* height: 19px; */
-		/* line-height: 19px; */
 		font-weight: 400;
-		/* vertical-align: top; */
 		text-align: end;
 	}
 
@@ -47,7 +43,7 @@ const Table = styled.table`
 `;
 // TODO: 현재가 대비 퍼센트
 // 마이너스일 떈 파란색으루
-const Orderbookdepth = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthBidList }) => {
+const OrderBook = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthBidList }) => {
 	return (
 		<Table>
 			<thead>
@@ -60,7 +56,7 @@ const Orderbookdepth = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthB
 				{Object.entries(orderbookdepthAskList)
 					.filter(o => o[1])
 					.reverse()
-					.slice(-15)
+					.slice(-12)
 					.map((orderbookdepthAsk, idx) =>
 						orderbookdepthAsk[1] > 0 ? (
 							<tr key={orderbookdepthAsk[0]} style={{ backgroundColor: '#eef6ff' }}>
@@ -85,7 +81,7 @@ const Orderbookdepth = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthB
 				{Object.entries(orderbookdepthBidList)
 					.filter(o => o[1] > 0)
 					.reverse()
-					.slice(0, 15)
+					.slice(0, 12)
 					.map((orderbookdepthBid, idx) =>
 						orderbookdepthBid[1] > 0 ? (
 							<tr key={orderbookdepthBid[0]} style={{ backgroundColor: '#fff0ef' }}>
@@ -112,4 +108,4 @@ const Orderbookdepth = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthB
 	);
 };
 
-export default Orderbookdepth;
+export default OrderBook;

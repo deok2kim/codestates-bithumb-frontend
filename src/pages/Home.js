@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { fetchCoins } from '../api';
 import RealPrice from './RealPrice';
-import TopFive from './TopFive';
+import TopFiveCoins from './TopFiveCoins';
+import Loader from '../components/Loader';
 
 function Home() {
-	console.log('홈');
-	const { isLoading, data: tickers } = useQuery(['allCoins'], () => fetchCoins('ALL', 'KRW'));
+	const { isLoading, data: coins } = useQuery(['allCoins'], () => fetchCoins('ALL', 'KRW'));
 
-	if (isLoading) return 'Loading...';
+	if (isLoading) {
+		return <Loader type="spin" color="#FE9601" />;
+	}
 	return (
 		<Container>
-			<TopFive tickers={tickers} />
-			<RealPrice tickers={tickers} />
+			<TopFiveCoins coins={coins.data} />
+			<RealPrice coins={coins.data} />
 		</Container>
 	);
 }

@@ -1,18 +1,20 @@
 import React, { useRef, useEffect, useState } from 'react';
-
 import styled from 'styled-components';
-import Orderbookdepth from '../components/Orderbookdepth';
-import Ticker from '../components/Ticker';
+
+import OrderBook from '../components/OrderBook';
+import PriceInfo from '../components/PriceInfo';
 import Transaction from '../components/Transaction';
 
 import CandlestickChart from '../components/CandlestickChart';
 import { useParams } from 'react-router-dom';
 import CoinChart from '../components/CoinChart';
 import CoinActiveChart from '../components/CoinActiveCahrt';
+import { useCallback } from 'react';
 
 function TradeOrder() {
+	console.log('trade_order');
 	const params = useParams();
-	const [orderCurreny, paymentCurrency] = params.coinId.split('_');
+	const [orderCurrency, paymentCurrency] = params.coinId.split('_');
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [ticker, setTicker] = useState({});
 	const [transactions, setTransaction] = useState([]);
@@ -31,27 +33,18 @@ function TradeOrder() {
 			},
 		],
 	});
-	const [tmpChartData, setTmpChartData] = useState({
-		labels: [],
-		datasets: [
-			{
-				label: '',
-				data: [],
-			},
-		],
-	});
 
 	const webSocketUrl = 'wss://pubwss.bithumb.com/pub/ws';
 	let ws = useRef(null);
 
-	const orderSort = orderList => {
+	const orderSort = useCallback(orderList => {
 		return Object.keys(orderList)
 			.sort()
 			.reduce((newObj, key) => {
 				newObj[key] = orderList[key];
 				return newObj;
 			}, {});
-	};
+	}, []);
 
 	// 소켓 객체 생성
 	useEffect(() => {
@@ -68,7 +61,6 @@ function TradeOrder() {
 			ws.current.onmessage = e => {
 				const data = JSON.parse(e.data);
 				if (data.type === 'ticker') {
-					// console.log(currentPrice.datasets.data)
 					setTicker(data.content);
 					setCurrentPrice(prev => ({
 						labels: [...prev.labels, ''].slice(-30),
@@ -124,27 +116,25 @@ function TradeOrder() {
 		if (socketConnected) {
 			console.log('send');
 
-			const subscribeTickerData = {
+			const subscribeTickerParams = {
 				type: 'ticker',
-				symbols: [`${orderCurreny}_${paymentCurrency}`],
+				symbols: [`${orderCurrency}_${paymentCurrency}`],
 				tickTypes: ['MID', '24H'],
 			};
-			const subscribeTransactionData = {
+			const subscribeTransactionParams = {
 				type: 'transaction',
-				symbols: [`${orderCurreny}_${paymentCurrency}`],
+				symbols: [`${orderCurrency}_${paymentCurrency}`],
 			};
-			const subscribeOrderbookdepthData = {
+			const subscribeOrderbookdepthParams = {
 				type: 'orderbookdepth',
-				symbols: [`${orderCurreny}_${paymentCurrency}`],
+				symbols: [`${orderCurrency}_${paymentCurrency}`],
 			};
 
-			ws.current.send(JSON.stringify(subscribeTickerData));
-
-			ws.current.send(JSON.stringify(subscribeTransactionData));
-
-			ws.current.send(JSON.stringify(subscribeOrderbookdepthData));
+			ws.current.send(JSON.stringify(subscribeTickerParams));
+			ws.current.send(JSON.stringify(subscribeTransactionParams));
+			ws.current.send(JSON.stringify(subscribeOrderbookdepthParams));
 		}
-	}, [socketConnected]);
+	}, [orderCurrency, paymentCurrency, socketConnected]);
 
 	return (
 		<Container>
@@ -152,33 +142,33 @@ function TradeOrder() {
 			{/* 정보 */}
 			<Main>
 				<CandlestickChart
-					orderCurrency={params.coinId.split('_')[0]}
-					paymentCurrency={params.coinId.split('_')[1]}
+					orderCurrency={orderCurrency}
+					paymentCurrency={paymentCurrency}
 					chartIntervals="30m"
 				/>
 			</Main>
 			<SideBar />
 			<ContentBox>
 				<Content1>
-					{Object.keys(ticker).length > 0 ? <Ticker ticker={ticker} info24={info24} /> : ''}
+					{Object.keys(ticker).length > 0 ? <PriceInfo ticker={ticker} info24={info24} /> : ''}
 					{/* <div style={{ border: '1px solid black', padding: 0 }}>
 						<Line type="line" data={tmpChartData} options={miniChartOptions} height={50} />
 					</div> */}
 					{/* 미니 차트 */}
 					<CoinActiveChart
-						orderCurrency={orderCurreny}
+						orderCurrency={orderCurrency}
 						paymentCurrency={paymentCurrency}
 						chartIntervals="10m"
 						width="420px"
 						height="150px"
 					/>
 					{/* 체결 내역 */}
-					{transactions.length > 0 ? <Transaction transactions={transactions} /> : ''}
+					{transactions.length > 0 ? <Transaction ws={ws} transactions={transactions} /> : ''}
 				</Content1>
 				<Content2>
 					{/* 호가 */}
 					{Object.keys(orderbookdepth).length > 0 ? (
-						<Orderbookdepth
+						<OrderBook
 							orderbookdepth={orderbookdepth}
 							orderbookdepthAskList={orderbookdepthAskList}
 							orderbookdepthBidList={orderbookdepthBidList}

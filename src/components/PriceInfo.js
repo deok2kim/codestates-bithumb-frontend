@@ -57,7 +57,7 @@ const Table = styled.table`
 	}
 }`;
 
-const Ticker = ({ ticker, info24 }) => {
+const PriceInfo = ({ ticker, info24 }) => {
 	const { symbol, chgRate, highPrice, lowPrice, volumePower, prevClosePrice, chgAmt } = ticker;
 	const { volume, value } = info24;
 	return (
@@ -98,4 +98,4 @@ const Ticker = ({ ticker, info24 }) => {
 	);
 };
 
-export default Ticker;
+export default PriceInfo;

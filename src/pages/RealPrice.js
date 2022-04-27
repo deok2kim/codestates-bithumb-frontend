@@ -1,20 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
 import RealPriceTable from '../components/RealPriceTable';
 
-function RealPrice({ tickers }) {
-	// 한무 스크롤
-	console.log('Realprice');
+function RealPrice({ coins }) {
 	const [target, setTarget] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [favoriteCoins, setFavoriteCoins] = useState([]);
 	const [mainCategory, setMainCategory] = useState('krw');
-	const nextId = useRef(50);
+	const [stop, setStop] = useState(false);
+	const nextId = useRef(15);
 
 	useEffect(() => {
-		console.log('생성될때 한번번');
-		setFavoriteCoins(JSON.parse(localStorage.getItem('favorite')));
+		setFavoriteCoins(JSON.parse(localStorage.getItem('favorite')) || []);
 	}, []);
 
 	const [input, setInput] = useState('');
@@ -24,7 +23,7 @@ function RealPrice({ tickers }) {
 
 	const showMoreItems = useCallback(async () => {
 		setIsLoading(true);
-		await new Promise(resolve => setTimeout(resolve, 300));
+		await new Promise(resolve => setTimeout(resolve, 2000));
 		nextId.current += 10;
 		setIsLoading(false);
 	}, []);
@@ -32,6 +31,7 @@ function RealPrice({ tickers }) {
 	const onIntersect = useCallback(
 		async ([entry], observer) => {
 			if (entry.isIntersecting && !isLoading) {
+				console.log('한무');
 				observer.unobserve(entry.target);
 				await showMoreItems();
 				observer.observe(entry.target);
@@ -43,11 +43,10 @@ function RealPrice({ tickers }) {
 	// 즐겨찾기
 	// const LOCALSTORAGE_FAVORITE_KEY = 'favorite'
 	const toggleFavorite = useCallback(symbol => {
-		console.log('toggle');
 		const favoriteCoinsInLocalStorage = JSON.parse(localStorage.getItem('favorite') || '[]');
-		const indexInFavoriteCoins = favoriteCoinsInLocalStorage.indexOf(symbol);
-		if (indexInFavoriteCoins >= 0) {
-			favoriteCoinsInLocalStorage.splice(indexInFavoriteCoins, 1);
+		const indexOfFavoriteCoins = favoriteCoinsInLocalStorage.indexOf(symbol);
+		if (indexOfFavoriteCoins >= 0) {
+			favoriteCoinsInLocalStorage.splice(indexOfFavoriteCoins, 1);
 			localStorage.setItem('favorite', JSON.stringify(favoriteCoinsInLocalStorage));
 		} else {
 			localStorage.setItem('favorite', JSON.stringify([symbol, ...favoriteCoinsInLocalStorage]));
@@ -73,12 +72,12 @@ function RealPrice({ tickers }) {
 	}, [target, onIntersect]);
 
 	const onStopShowMore = () => {
-		return nextId.current < tickers.length;
+		return nextId.current < Object.keys(coins).length;
 	};
 
 	return (
 		<RealPriceContiner>
-			<TabMarket>
+			<TabMarket mainCategory={mainCategory}>
 				<button onClick={() => onChangeMainCategory('krw')}>원화마켓</button>
 				<button onClick={() => onChangeMainCategory('favorite')}>즐겨찾기</button>
 				<InputWrapper>
@@ -96,20 +95,27 @@ function RealPrice({ tickers }) {
 					<tr>
 						<th>자산</th>
 						<th>실시간 시세</th>
-						<th>변동율</th>
+						<th>변동율ㅤ</th>
 						<th>거래금액(24h)</th>
 					</tr>
 				</thead>
 			</table>
 			<RealPriceTable
 				mainCategory={mainCategory}
-				tickers={tickers}
+				coins={coins}
 				nextId={nextId}
 				favoriteCoins={favoriteCoins}
 				toggleFavorite={toggleFavorite}
 				input={input}
+				setTarget={setTarget}
 			/>
-			{onStopShowMore() ? <TargetElem ref={setTarget}>{isLoading && '🚗💨💨💨'}</TargetElem> : ''}
+			{mainCategory === 'krw' && onStopShowMore() ? (
+				<TargetElem ref={setTarget}>
+					{isLoading && <ReactLoading type="bubbles" color="#FE9601" />}
+				</TargetElem>
+			) : (
+				''
+			)}
 		</RealPriceContiner>
 	);
 }
@@ -117,7 +123,9 @@ function RealPrice({ tickers }) {
 export default RealPrice;
 
 const TargetElem = styled.div`
-	height: 100px;
+	display: flex;
+	height: 150px;
+	justify-content: center;
 `;
 
 const RealPriceContiner = styled.div`
