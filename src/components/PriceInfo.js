@@ -57,13 +57,22 @@ const Table = styled.table`
 	}
 }`;
 
-const PriceInfo = ({ ticker, info24 }) => {
-	const { symbol, chgRate, highPrice, lowPrice, volumePower, prevClosePrice, chgAmt } = ticker;
-	const { volume, value } = info24;
+const PriceInfo = ({ coinInfo }) => {
+	const {
+		symbol,
+		chgRate,
+		highPrice,
+		lowPrice,
+		volumePower,
+		prevClosePrice,
+		volume,
+		value,
+		closePrice,
+	} = coinInfo;
 	return (
 		<Container>
 			<div>
-				<CurrentPrice chgRate={chgRate}>{parseInt(prevClosePrice)}</CurrentPrice>
+				<CurrentPrice chgRate={chgRate}>{parseInt(closePrice)}</CurrentPrice>
 				<ChgRate chgRate={chgRate}>{parseFloat(chgRate).toFixed(2)}%</ChgRate>
 			</div>
 			<Table>

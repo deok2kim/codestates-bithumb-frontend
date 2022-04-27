@@ -136,7 +136,7 @@ function CandlestickChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 								labels: {
 									show: true,
 									formatter: function (val) {
-										return val.toFixed(4);
+										return val.toLocaleString('ko-KR', { maximumFractionDigits: 4 });
 									},
 								},
 							},

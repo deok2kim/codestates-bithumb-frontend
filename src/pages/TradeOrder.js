@@ -2,44 +2,51 @@ import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import OrderBook from '../components/OrderBook';
-import PriceInfo from '../components/PriceInfo';
-import Transaction from '../components/Transaction';
 
 import CandlestickChart from '../components/CandlestickChart';
 import { useParams } from 'react-router-dom';
-import CoinChart from '../components/CoinChart';
+// import CoinChart from '../components/CoinChart';
 import CoinActiveChart from '../components/CoinActiveCahrt';
 import { useCallback } from 'react';
+import { useQuery } from 'react-query';
+import { fetchCoin, fetchOrderBook, fetchTransactionHistory } from '../api';
+import Loader from '../components/Loader';
+import TransactionContainer from '../components/TransactionContainer';
+import PriceInfoContainer from '../components/PriceInfoContainer';
 
 function TradeOrder() {
-	console.log('trade_order');
 	const params = useParams();
 	const [orderCurrency, paymentCurrency] = params.coinId.split('_');
+	// const { isLoading: orderBookLoading, data: initialOrderBookData } = useQuery(
+	// 	[orderCurrency, 'order book'],
+	// 	() => fetchOrderBook(orderCurrency, paymentCurrency),
+	// );
+	// console.log('orderbook', orderBookLoading, initialOrderBookData);
+	const { isLoading: transactionHistoryLoading, data: initialTransactionHistoryData } = useQuery(
+		[orderCurrency, 'transaction history'],
+		() => fetchTransactionHistory(orderCurrency, paymentCurrency, 30),
+	);
+	const { isLoading: tickerLoading, data: initialTickerData } = useQuery(
+		[orderCurrency, 'initial ticker'],
+		() => fetchCoin(orderCurrency, paymentCurrency),
+	);
+
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [ticker, setTicker] = useState({});
+
 	const [transactions, setTransaction] = useState([]);
+
 	const [orderbookdepth, setOrderbookdepth] = useState({});
 	const [orderbookdepthAskList, setOrderbookdepthAskList] = useState({});
 	const [orderbookdepthBidList, setOrderbookdepthBidList] = useState({});
-	const [info24, setInfo24] = useState({});
-	const [currentPrice, setCurrentPrice] = useState({
-		labels: [],
-		datasets: [
-			{
-				label: 'BTC 현재가격 변동',
-				data: [],
-				fill: true,
-				borderColor: 'rgb(255, 99, 132)',
-			},
-		],
-	});
 
 	const webSocketUrl = 'wss://pubwss.bithumb.com/pub/ws';
 	let ws = useRef(null);
 
 	const orderSort = useCallback(orderList => {
+		// console.log('orl', orderList);
 		return Object.keys(orderList)
-			.sort()
+			.sort((a, b) => a - b)
 			.reduce((newObj, key) => {
 				newObj[key] = orderList[key];
 				return newObj;
@@ -60,27 +67,23 @@ function TradeOrder() {
 			};
 			ws.current.onmessage = e => {
 				const data = JSON.parse(e.data);
-				if (data.type === 'ticker') {
-					setTicker(data.content);
-					setCurrentPrice(prev => ({
-						labels: [...prev.labels, ''].slice(-30),
-						datasets: [
-							{
-								...prev.datasets[0],
-								data: [
-									...prev.datasets[0].data,
-									parseInt(data.content.prevClosePrice) + parseInt(data.content.chgAmt),
-								].slice(-30),
-							},
-						],
+
+				if (data.type === 'ticker' && data.content.tickType === 'MID') {
+					setTicker(prev => ({
+						...prev,
+						...data.content,
 					}));
-					if (data.content.tickType === '24H') {
-						setInfo24({ volume: data.content.volume, value: data.content.value });
-					}
+				}
+				if (data.type === 'ticker' && data.content.tickType === '24H') {
+					setTicker(prev => ({
+						...prev,
+						volume: data.content.volume,
+						value: data.content.value,
+					}));
 				}
 
 				if (data.type === 'transaction') {
-					setTransaction(prevTransaction => [...prevTransaction, ...data.content.list].slice(-20));
+					setTransaction(data.content.list);
 				}
 
 				if (data.type === 'orderbookdepth') {
@@ -136,10 +139,13 @@ function TradeOrder() {
 		}
 	}, [orderCurrency, paymentCurrency, socketConnected]);
 
+	if (transactionHistoryLoading || tickerLoading) {
+		return <Loader type="spin" color="#FE9601" />;
+	}
 	return (
 		<Container>
 			<NavBar>Bithumb x codestates coin market</NavBar>
-			{/* 정보 */}
+			{/* 메인차트 */}
 			<Main>
 				<CandlestickChart
 					orderCurrency={orderCurrency}
@@ -150,10 +156,13 @@ function TradeOrder() {
 			<SideBar />
 			<ContentBox>
 				<Content1>
-					{Object.keys(ticker).length > 0 ? <PriceInfo ticker={ticker} info24={info24} /> : ''}
-					{/* <div style={{ border: '1px solid black', padding: 0 }}>
-						<Line type="line" data={tmpChartData} options={miniChartOptions} height={50} />
-					</div> */}
+					{/* 코인 정보 */}
+					<PriceInfoContainer
+						orderCurrency={orderCurrency}
+						paymentCurrency={paymentCurrency}
+						initialData={initialTickerData.data}
+						addedData={ticker}
+					/>
 					{/* 미니 차트 */}
 					<CoinActiveChart
 						orderCurrency={orderCurrency}
@@ -163,7 +172,12 @@ function TradeOrder() {
 						height="150px"
 					/>
 					{/* 체결 내역 */}
-					{transactions.length > 0 ? <Transaction ws={ws} transactions={transactions} /> : ''}
+					<TransactionContainer
+						orderCurrency={orderCurrency}
+						paymentCurrency={paymentCurrency}
+						initialData={initialTransactionHistoryData.data}
+						addedData={transactions}
+					/>
 				</Content1>
 				<Content2>
 					{/* 호가 */}
@@ -172,6 +186,7 @@ function TradeOrder() {
 							orderbookdepth={orderbookdepth}
 							orderbookdepthAskList={orderbookdepthAskList}
 							orderbookdepthBidList={orderbookdepthBidList}
+							closingPrice={initialTickerData.data.prev_closing_price}
 						/>
 					) : (
 						''

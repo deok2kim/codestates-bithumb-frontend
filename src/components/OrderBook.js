@@ -1,21 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const Info = styled.tr`
+	background-color: ${props => (props.ask ? '#eef6ff' : '#fff0ef')};
+	margin: 1rem 0;
+	padding: 1rem 0;
+	span {
+		width: 90px;
+		max-width: 100px;
+	}
+	td:first-child {
+		text-align: end;
+		color: ${props => (props.rate > 0 ? '#f75467' : '#4387F9')};
+
+		span + span {
+			padding-left: 30px;
+		}
+	}
+`;
+
 const Table = styled.table`
 	width: 250px;
 	max-height: 750px;
-	tr {
-		margin: 1rem 0;
-		padding: 1rem 0;
-		td:first-child {
-			text-align: end;
-			color: #f75467;
-
-			span + span {
-				padding: 0 15px;
-			}
-		}
-	}
 
 	th {
 		text-align: center;
@@ -43,62 +49,88 @@ const Table = styled.table`
 `;
 // TODO: 현재가 대비 퍼센트
 // 마이너스일 떈 파란색으루
-const OrderBook = ({ orderbookdepth, orderbookdepthAskList, orderbookdepthBidList }) => {
+const OrderBook = ({
+	orderbookdepth,
+	orderbookdepthAskList,
+	orderbookdepthBidList,
+	closingPrice,
+}) => {
+	const getRate = (currentPrice, closingPrice) => {
+		return ((currentPrice - closingPrice) / closingPrice) * 100;
+	};
 	return (
 		<Table>
 			<thead>
-				<tr>
+				<Info>
 					<th>가격 ({orderbookdepth.symbol.split('_')[1]})</th>
 					<th>수량 ({orderbookdepth.symbol.split('_')[0]})</th>
-				</tr>
+				</Info>
 			</thead>
 			<tbody>
 				{Object.entries(orderbookdepthAskList)
 					.filter(o => o[1])
-					.reverse()
+					.sort((a, b) => b[0] - a[0])
 					.slice(-12)
 					.map((orderbookdepthAsk, idx) =>
 						orderbookdepthAsk[1] > 0 ? (
-							<tr key={orderbookdepthAsk[0]} style={{ backgroundColor: '#eef6ff' }}>
+							<Info
+								key={orderbookdepthAsk[0]}
+								rate={getRate(parseFloat(orderbookdepthAsk[0]), parseFloat(closingPrice))}
+								ask={true}
+							>
 								<td>
 									<span>
 										{parseFloat(orderbookdepthAsk[0]).toLocaleString('ko-KR', {
 											maximumFractionDigits: 4,
 										})}
 									</span>
-									<span>-1.57%</span>
+									<span>
+										{getRate(parseFloat(orderbookdepthAsk[0]), parseFloat(closingPrice)).toFixed(2)}{' '}
+										%
+									</span>
 								</td>
 								<td>
-									{parseFloat(orderbookdepthAsk[1]).toLocaleString('ko-KR', {
-										maximumFractionDigits: 4,
-									})}
+									{parseFloat(
+										parseFloat(orderbookdepthAsk[1]).toLocaleString('ko-KR', {
+											maximumFractionDigits: 4,
+										}),
+									).toFixed(4)}
 								</td>
-							</tr>
+							</Info>
 						) : (
 							''
 						),
 					)}
 				{Object.entries(orderbookdepthBidList)
 					.filter(o => o[1] > 0)
-					.reverse()
+					.sort((a, b) => b[0] - a[0])
 					.slice(0, 12)
 					.map((orderbookdepthBid, idx) =>
 						orderbookdepthBid[1] > 0 ? (
-							<tr key={orderbookdepthBid[0]} style={{ backgroundColor: '#fff0ef' }}>
+							<Info
+								key={orderbookdepthBid[0]}
+								rate={getRate(parseFloat(orderbookdepthBid[0]), parseFloat(closingPrice))}
+								ask={false}
+							>
 								<td>
 									<span>
 										{parseFloat(orderbookdepthBid[0]).toLocaleString('ko-KR', {
 											maximumFractionDigits: 4,
 										})}
 									</span>
-									<span>-3.74%</span>
+									<span>
+										{getRate(parseFloat(orderbookdepthBid[0]), parseFloat(closingPrice)).toFixed(2)}
+										%
+									</span>
 								</td>
 								<td>
-									{parseFloat(orderbookdepthBid[1]).toLocaleString('ko-KR', {
-										maximumFractionDigits: 4,
-									})}
+									{parseFloat(
+										parseFloat(orderbookdepthBid[1]).toLocaleString('ko-KR', {
+											maximumFractionDigits: 4,
+										}),
+									).toFixed(4)}
 								</td>
-							</tr>
+							</Info>
 						) : (
 							''
 						),
