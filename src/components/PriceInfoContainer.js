@@ -4,6 +4,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import PriceInfo from './PriceInfo';
 
+import { Helmet } from 'react-helmet';
+import ReactLoading from 'react-loading';
+
 function PriceInfoContainer({ initialData, orderCurrency, paymentCurrency, addedData }) {
 	const [coinInfo, setCoinInfo] = useState(initialData);
 
@@ -29,8 +32,20 @@ function PriceInfoContainer({ initialData, orderCurrency, paymentCurrency, added
 	useEffect(() => {
 		formatData();
 	}, []);
-	if (!coinInfo.symbol) return 'loading';
-	return <PriceInfo coinInfo={coinInfo} />;
+	if (!coinInfo.symbol) return '';
+	return (
+		<>
+			<PriceInfo coinInfo={coinInfo} />
+			<Helmet>
+				<title>
+					{parseFloat(coinInfo.closePrice).toLocaleString('ko-KR', {
+						maximumFractionDigits: 4,
+					})}{' '}
+					{coinInfo.symbol.replace('_', '/')}
+				</title>
+			</Helmet>
+		</>
+	);
 	// return <></>;
 }
 
