@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
-import RealPriceTable from '../components/RealPriceTable';
+import CoinListTable from '../components/CoinListTable';
 
-function RealPrice({ coins }) {
+function CoinList({ coins }) {
 	const [target, setTarget] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [favoriteCoins, setFavoriteCoins] = useState([]);
 	const [mainCategory, setMainCategory] = useState('krw');
-	const [stop, setStop] = useState(false);
 	const nextId = useRef(15);
 
 	useEffect(() => {
@@ -78,8 +76,15 @@ function RealPrice({ coins }) {
 	return (
 		<RealPriceContiner>
 			<TabMarket mainCategory={mainCategory}>
-				<button onClick={() => onChangeMainCategory('krw')}>원화마켓</button>
-				<button onClick={() => onChangeMainCategory('favorite')}>즐겨찾기</button>
+				<CategoryButton show={mainCategory === 'krw'} onClick={() => onChangeMainCategory('krw')}>
+					원화마켓
+				</CategoryButton>
+				<CategoryButton
+					show={mainCategory === 'favorite'}
+					onClick={() => onChangeMainCategory('favorite')}
+				>
+					즐겨찾기
+				</CategoryButton>
 				<InputWrapper>
 					<Input placeholder="검색" onChange={onChange} value={input} />
 				</InputWrapper>
@@ -100,7 +105,7 @@ function RealPrice({ coins }) {
 					</tr>
 				</thead>
 			</table>
-			<RealPriceTable
+			<CoinListTable
 				mainCategory={mainCategory}
 				coins={coins}
 				nextId={nextId}
@@ -120,12 +125,30 @@ function RealPrice({ coins }) {
 	);
 }
 
-export default RealPrice;
+export default CoinList;
 
 const TargetElem = styled.div`
 	display: flex;
 	height: 150px;
 	justify-content: center;
+`;
+
+const CategoryButton = styled.button`
+	/* font-weight: 500; */
+	/* color: #1b1b1b; */
+	position: relative;
+	display: inline-block;
+	margin-right: 16px;
+	font-size: 20px;
+	line-height: 30px;
+	font-weight: 400;
+	padding: 12px 20px;
+	color: #777;
+	text-align: center;
+	cursor: pointer;
+	min-width: 70px;
+	box-sizing: border-box;
+	border-bottom: ${props => (props.show ? '3px solid black' : '')};
 `;
 
 const RealPriceContiner = styled.div`
@@ -172,22 +195,6 @@ const TabMarket = styled.div`
 
 	&:first-child {
 		margin-left: 0;
-	}
-	button {
-		/* font-weight: 500; */
-		/* color: #1b1b1b; */
-		position: relative;
-		display: inline-block;
-		margin-right: 16px;
-		font-size: 20px;
-		line-height: 30px;
-		font-weight: 400;
-		padding: 12px 20px;
-		color: #777;
-		text-align: center;
-		cursor: pointer;
-		min-width: 70px;
-		box-sizing: border-box;
 	}
 `;
 
