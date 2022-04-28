@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import CoinChart from '../components/CoinChart';
 import { coinNames } from '../data/coinNameData';
+import { BsArrowUp, BsArrowDown, BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
 
 function TopFiveCoins({ coins }) {
 	const [topFiveCoins, setTopFiveCoins] = useState([]);
@@ -39,6 +40,36 @@ function TopFiveCoins({ coins }) {
 	useEffect(() => {
 		sort(coins);
 	}, [coins, sort]);
+
+	const setRateArrow = useCallback(rate => {
+		if (rate >= 3) {
+			return (
+				<span>
+					<BsArrowUp color="#f75467" />+
+				</span>
+			);
+		} else if (rate > 0) {
+			return (
+				<span>
+					<BsFillCaretUpFill color="#f75467" />+
+				</span>
+			);
+		} else if (rate === 0) {
+			return '';
+		} else if (rate > -3) {
+			return (
+				<span>
+					<BsFillCaretDownFill color="#4386f9" />-
+				</span>
+			);
+		} else {
+			return (
+				<span>
+					<BsArrowDown color="#4386f9" />-
+				</span>
+			);
+		}
+	}, []);
 	return (
 		<TopFiveArea>
 			<h2>마켓 변동률 TOP5</h2>
@@ -53,7 +84,7 @@ function TopFiveCoins({ coins }) {
 									<Name>{coin.name}</Name>
 									<Price color={coin.rate}>{coin.closing_price}</Price>
 									<Rate color={coin.rate}>
-										{coin.rate > 0 ? '🔺' : '🔻'}
+										{setRateArrow(coin.rate)}
 										{coin.rate} %
 									</Rate>
 									<CoinChart
@@ -150,4 +181,5 @@ const Rate = styled.p`
 	line-height: 17px;
 	font-weight: 400;
 	letter-spacing: 0;
+	vertical-align: middle;
 `;

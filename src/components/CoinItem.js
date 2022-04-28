@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-function CoinItem({ coin, toggleFavorite, favoriteCoins, getRatePrice }) {
+function CoinItem({ coin, toggleFavorite, favoriteCoins, getRatePrice, setRateArrow }) {
 	return (
 		<CoinWrapper>
 			<CoinTitle>
@@ -24,7 +24,8 @@ function CoinItem({ coin, toggleFavorite, favoriteCoins, getRatePrice }) {
 				<div>
 					<strong>{coin.fluctate_24H} 원</strong>
 					<strong>
-						({coin.fluctate_rate_24H > 0 ? `+${coin.fluctate_rate_24H}` : coin.fluctate_rate_24H} %)
+						{coin.fluctate_rate_24H > 0 ? `+${coin.fluctate_rate_24H}` : coin.fluctate_rate_24H} %{' '}
+						{setRateArrow(parseFloat(coin.fluctate_rate_24H))}
 					</strong>
 				</div>
 			</Rate>
@@ -73,6 +74,7 @@ const CoinTitle = styled(Td)`
 		display: inline-block;
 		line-height: 20px;
 		font-weight: 400;
+		vertical-align: middle;
 	}
 `;
 

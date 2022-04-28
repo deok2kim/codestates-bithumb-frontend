@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { coinNames } from '../data/coinNameData';
 import CoinItem from './CoinItem';
 import { NoCoins } from './Error';
-
+import { BsArrowUp, BsArrowDown, BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
 function RealPriceTable({
 	mainCategory,
 	coins,
@@ -79,6 +79,20 @@ function RealPriceTable({
 		);
 	}, [realRate, coins, favoriteCoins]);
 
+	const setRateArrow = useCallback(rate => {
+		if (rate >= 3) {
+			return <BsArrowUp color="#f75467" />;
+		} else if (rate > 0) {
+			return <BsFillCaretUpFill color="#f75467" />;
+		} else if (rate === 0) {
+			return '';
+		} else if (rate > -3) {
+			return <BsFillCaretDownFill color="#4386f9" />;
+		} else {
+			return <BsArrowDown color="#4386f9" />;
+		}
+	}, []);
+
 	useEffect(() => {
 		setCoins();
 	}, [coins, favoriteCoins, setCoins]);
@@ -113,6 +127,7 @@ function RealPriceTable({
 										toggleFavorite={toggleFavorite}
 										favoriteCoins={favoriteCoins}
 										getRatePrice={getRatePrice}
+										setRateArrow={setRateArrow}
 									/>
 								) : (
 									''
