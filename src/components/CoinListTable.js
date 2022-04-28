@@ -150,6 +150,7 @@ function RealPriceTable({
 			)}
 			{mainCategory === 'favorite' &&
 				myfavoriteCoins.length > 0 &&
+				input &&
 				searchedFavoriteCoins.length === 0 && <NoCoins msg="찾는 코인이 없습니다.😢" />}
 		</>
 	);
