@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import CoinChart from '../components/CoinChart';
 import { coinNames } from '../data/coinNameData';
 import { BsArrowUp, BsArrowDown, BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
+import { setComma } from '../components/utils';
 
 function TopFiveCoins({ coins }) {
 	const [topFiveCoins, setTopFiveCoins] = useState([]);
@@ -31,9 +32,7 @@ function TopFiveCoins({ coins }) {
 				symbol: coin,
 				rate: realRate(coins[coin].opening_price, coins[coin].closing_price).toFixed(2),
 				name: coinNames[coin].koreanName,
-				closing_price: parseFloat(coins[coin].closing_price).toLocaleString('ko-KR', {
-					maximumFractionDigits: 4,
-				}),
+				closing_price: setComma(parseFloat(coins[coin].closing_price), 4),
 			})),
 		);
 	}, [coins, realRate]);

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { setComma } from './utils';
 
 const Info = styled.tr`
 	background-color: ${props => (props.ask ? '#eef6ff' : '#fff0ef')};
@@ -79,23 +80,13 @@ const OrderBook = ({
 								ask={true}
 							>
 								<td>
-									<span>
-										{parseFloat(orderbookdepthAsk[0]).toLocaleString('ko-KR', {
-											maximumFractionDigits: 4,
-										})}
-									</span>
+									<span>{setComma(parseFloat(orderbookdepthAsk[0]), 4)}</span>
 									<span>
 										{getRate(parseFloat(orderbookdepthAsk[0]), parseFloat(closingPrice)).toFixed(2)}{' '}
 										%
 									</span>
 								</td>
-								<td>
-									{parseFloat(
-										parseFloat(orderbookdepthAsk[1]).toLocaleString('ko-KR', {
-											maximumFractionDigits: 4,
-										}),
-									).toFixed(4)}
-								</td>
+								<td>{parseFloat(setComma(parseFloat(orderbookdepthAsk[1]), 4)).toFixed(4)}</td>
 							</Info>
 						) : (
 							''
@@ -113,23 +104,13 @@ const OrderBook = ({
 								ask={false}
 							>
 								<td>
-									<span>
-										{parseFloat(orderbookdepthBid[0]).toLocaleString('ko-KR', {
-											maximumFractionDigits: 4,
-										})}
-									</span>
+									<span>{setComma(parseFloat(orderbookdepthBid[0]), 4)}</span>
 									<span>
 										{getRate(parseFloat(orderbookdepthBid[0]), parseFloat(closingPrice)).toFixed(2)}
 										%
 									</span>
 								</td>
-								<td>
-									{parseFloat(
-										parseFloat(orderbookdepthBid[1]).toLocaleString('ko-KR', {
-											maximumFractionDigits: 4,
-										}),
-									).toFixed(4)}
-								</td>
+								<td>{parseFloat(setComma(parseFloat(orderbookdepthBid[1]), 4)).toFixed(4)}</td>
 							</Info>
 						) : (
 							''

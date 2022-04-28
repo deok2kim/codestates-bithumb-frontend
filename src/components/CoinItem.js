@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { setComma } from './utils';
 
 function CoinItem({ coin, toggleFavorite, favoriteCoins, getRatePrice, setRateArrow }) {
 	return (
@@ -22,9 +23,9 @@ function CoinItem({ coin, toggleFavorite, favoriteCoins, getRatePrice, setRateAr
 			</RealTimePrice>
 			<Rate color={coin.fluctate_rate_24H}>
 				<div>
-					<strong>{coin.fluctate_24H} 원</strong>
+					<strong>{setComma(parseFloat(coin.fluctate_24H), 4)} 원 </strong>
 					<strong>
-						{coin.fluctate_rate_24H > 0 ? `+${coin.fluctate_rate_24H}` : coin.fluctate_rate_24H} %{' '}
+						({coin.fluctate_rate_24H > 0 ? `+${coin.fluctate_rate_24H}` : coin.fluctate_rate_24H} %){' '}
 						{setRateArrow(parseFloat(coin.fluctate_rate_24H))}
 					</strong>
 				</div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { setComma } from './utils';
 
 const Container = styled.div`
 	margin: 20px;
@@ -84,9 +85,7 @@ const Transaction = ({ transactions }) => {
 							<tr key={info.contDtm + info.contAmt + info.contQty + info.buySellGb}>
 								<td>{info.contDtm.split(' ')[1].split('.')[0]}</td>
 								{/* <td>{info.contDtm}</td> */}
-								<td>
-									{parseInt(info.contPrice).toLocaleString('ko-KR', { maximumFractionDigits: 4 })}
-								</td>
+								<td>{setComma(parseInt(info.contPrice), 1)}</td>
 								{}
 								<td>
 									<ColorText buySellGb={info.buySellGb === '1' ? 'blue' : 'red'}>

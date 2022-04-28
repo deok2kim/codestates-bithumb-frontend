@@ -6,6 +6,7 @@ import PriceInfo from './PriceInfo';
 
 import { Helmet } from 'react-helmet';
 import ReactLoading from 'react-loading';
+import { setComma } from '../components/utils';
 
 function PriceInfoContainer({ initialData, orderCurrency, paymentCurrency, addedData }) {
 	const [coinInfo, setCoinInfo] = useState(initialData);
@@ -38,15 +39,11 @@ function PriceInfoContainer({ initialData, orderCurrency, paymentCurrency, added
 			<PriceInfo coinInfo={coinInfo} />
 			<Helmet>
 				<title>
-					{parseFloat(coinInfo.closePrice).toLocaleString('ko-KR', {
-						maximumFractionDigits: 4,
-					})}{' '}
-					{coinInfo.symbol.replace('_', '/')}
+					{setComma(parseFloat(coinInfo.closePrice), 4)} {coinInfo.symbol.replace('_', '/')}
 				</title>
 			</Helmet>
 		</>
 	);
-	// return <></>;
 }
 
 export default React.memo(PriceInfoContainer);

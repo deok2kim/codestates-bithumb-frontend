@@ -7,6 +7,7 @@ import { coinNames } from '../data/coinNameData';
 import CoinItem from './CoinItem';
 import { NoCoins } from './Error';
 import { BsArrowUp, BsArrowDown, BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
+import { setComma } from './utils';
 function RealPriceTable({
 	mainCategory,
 	coins,
@@ -37,19 +38,14 @@ function RealPriceTable({
 				symbol: coin,
 				name: coinNames[coin].koreanName,
 				rate: realRate(coins[coin].opening_price, coins[coin].closing_price),
-				rating_price: (
+				rating_price: setComma(
 					(coins[coin].closing_price *
 						realRate(coins[coin].opening_price, coins[coin].closing_price)) /
-					100
-				).toLocaleString('ko-KR', {
-					maximumFractionDigits: 4,
-				}),
-				closing_price: parseFloat(coins[coin].closing_price).toLocaleString('ko-KR', {
-					maximumFractionDigits: 4,
-				}),
-				acc_trade_value_24H: parseInt(coins[coin].acc_trade_value_24H).toLocaleString('ko-KR', {
-					maximumFractionDigits: 4,
-				}),
+						100,
+					4,
+				),
+				closing_price: setComma(parseFloat(coins[coin].closing_price), 4),
+				acc_trade_value_24H: setComma(parseInt(coins[coin].acc_trade_value_24H), 4),
 			})),
 		);
 		setDisplayCoins(
@@ -60,19 +56,14 @@ function RealPriceTable({
 					symbol: coin,
 					name: coinNames[coin].koreanName,
 					rate: realRate(coins[coin].opening_price, coins[coin].closing_price).toFixed(2),
-					rating_price: (
+					rating_price: setComma(
 						(coins[coin].closing_price *
 							realRate(coins[coin].opening_price, coins[coin].closing_price)) /
-						100
-					).toLocaleString('ko-KR', {
-						maximumFractionDigits: 4,
-					}),
-					closing_price: parseFloat(coins[coin].closing_price).toLocaleString('ko-KR', {
-						maximumFractionDigits: 4,
-					}),
-					acc_trade_value_24H: parseInt(coins[coin].acc_trade_value_24H).toLocaleString('ko-KR', {
-						maximumFractionDigits: 4,
-					}),
+							100,
+						4,
+					),
+					closing_price: setComma(parseFloat(coins[coin].closing_price), 4),
+					acc_trade_value_24H: setComma(parseInt(coins[coin].acc_trade_value_24H), 4),
 					accSort: parseInt(coins[coin].acc_trade_value_24H),
 				}))
 				.sort((a, b) => b.accSort - a.accSort),
@@ -85,7 +76,7 @@ function RealPriceTable({
 		} else if (rate > 0) {
 			return <BsFillCaretUpFill color="#f75467" />;
 		} else if (rate === 0) {
-			return '';
+			return 'ㅤ';
 		} else if (rate > -3) {
 			return <BsFillCaretDownFill color="#4386f9" />;
 		} else {
@@ -110,10 +101,10 @@ function RealPriceTable({
 		<>
 			<Container>
 				<colgroup>
-					<col width="4%" />
-					<col width="2%" />
-					<col width="4%" />
-					<col width="4%" />
+					<col width="150px" />
+					<col width="350px" />
+					<col width="350px" />
+					<col width="350px" />
 				</colgroup>
 				<tbody>
 					{mainCategory === 'krw' &&
@@ -143,6 +134,7 @@ function RealPriceTable({
 									toggleFavorite={toggleFavorite}
 									favoriteCoins={favoriteCoins}
 									getRatePrice={getRatePrice}
+									setRateArrow={setRateArrow}
 								/>
 							) : (
 								''
