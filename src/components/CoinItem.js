@@ -2,13 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { setComma } from './utils';
+import { AiFillStar } from 'react-icons/ai';
 
 function CoinItem({ coin, toggleFavorite, favoriteCoins, getRatePrice, setRateArrow }) {
 	return (
 		<CoinWrapper>
 			<CoinTitle>
 				<FavoriteButton onClick={() => toggleFavorite(coin.symbol)}>
-					{favoriteCoins.includes(coin.symbol) ? '🧡' : '🤍'}
+					{favoriteCoins.includes(coin.symbol) ? (
+						<AiFillStar color="#fe9601" size="20" />
+					) : (
+						<AiFillStar color="#d6d6d6" size={20} />
+					)}
 				</FavoriteButton>
 				<Link to={`trade_order/${coin.symbol}_KRW`}>
 					<p>
