@@ -73,7 +73,7 @@ const PriceInfo = ({ coinInfo }) => {
 	return (
 		<Container>
 			<div>
-				<CurrentPrice chgRate={chgRate}>{parseInt(closePrice)}</CurrentPrice>
+				<CurrentPrice chgRate={chgRate}>{setComma(parseInt(closePrice), 4)}</CurrentPrice>
 				<ChgRate chgRate={chgRate}>{parseFloat(chgRate).toFixed(2)}%</ChgRate>
 			</div>
 			<Table>
@@ -81,7 +81,7 @@ const PriceInfo = ({ coinInfo }) => {
 					<tr>
 						<th>거래량(24h)</th>
 						<td>
-							{parseFloat(volume).toFixed(4)} {symbol.split('_')[0]}
+							{setComma(parseFloat(volume), 0)} {symbol.split('_')[0]}
 						</td>
 						<th>고가(당일)</th>
 						<td>{setComma(parseInt(highPrice), 4)}</td>

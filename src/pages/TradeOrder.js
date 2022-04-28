@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { fetchCoin, fetchOrderBook, fetchTransactionHistory } from '../api';
@@ -13,6 +13,8 @@ import PriceInfoContainer from '../components/PriceInfoContainer';
 import OrderBook from '../components/OrderBook';
 import CoinListTable from '../components/CoinListTable';
 import TRCoinList from '../components/TRCoinList';
+
+import logo from '../images/logo192.png';
 
 function TradeOrder() {
 	const params = useParams();
@@ -112,7 +114,6 @@ function TradeOrder() {
 			ws.current.close();
 		};
 	}, []);
-
 	// 소켓 연결시 send 메소드
 	useEffect(() => {
 		if (socketConnected) {
@@ -138,12 +139,22 @@ function TradeOrder() {
 		}
 	}, [orderCurrency, paymentCurrency, socketConnected]);
 
+	useEffect(() => {
+		setOrderbookdepth({});
+		setOrderbookdepthAskList({});
+		setOrderbookdepthBidList({});
+	}, [orderCurrency]);
+
 	if (transactionHistoryLoading || tickerLoading) {
 		return '';
 	}
 	return (
 		<Container>
-			<NavBar>Bithumb x codestates coin market</NavBar>
+			<NavBar>
+				<Link to="/codestates-bithumb-frontend">
+					<img src={logo} alt="logo" />
+				</Link>
+			</NavBar>
 			{/* 메인차트 */}
 			<Main>
 				<CandlestickChart
@@ -195,7 +206,7 @@ function TradeOrder() {
 				</Content2>
 				{/* <Content3 /> */}
 			</ContentBox>
-			<Footer>김덕기(프론트엔드)</Footer>
+			<Footer />
 		</Container>
 	);
 }
@@ -204,7 +215,7 @@ export default TradeOrder;
 
 const Container = styled.div`
 	display: grid;
-	height: 120vh;
+	height: 140vh;
 	width: 1200px;
 	margin: auto;
 	grid-template-rows: 0.2fr 2fr 1.25fr 1.25fr 0.2fr;
@@ -225,7 +236,7 @@ const Container = styled.div`
 `;
 
 const NavBar = styled.nav`
-	background: #3a3a55;
+	/* background: #3a3a55; */
 	grid-area: nav;
 	padding: 0.25rem;
 `;
@@ -269,48 +280,12 @@ const Content1 = styled.div`
 	/* min-width: 600px; */
 `;
 const Content2 = styled(Content1)``;
-const Content3 = styled(Content1)``;
 const Footer = styled.footer`
-	background: #ff9637;
+	/* background: #ff9637; */
 	grid-area: footer;
 	padding: 0.25rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	/* height: 100px; */
 `;
-
-// const Container = styled.div`
-//   display: grid;
-//   height: 100vh;
-//   grid-template-rows: 0.2fr 1fr 0.5fr 0.5fr;
-//   grid-template-areas:
-//     "nav nav nav nav"
-//     "sidebar main main main"
-//     "sidebar content content content"
-//     "sidebar footer footer footer";
-//   text-align: center;
-//   grid-gap: 0.25rem;
-//   transition: all 0.25s ease-in-out;
-//   @media (max-width: 550px) {
-//     grid-template-columns: 1fr;
-//     grid-template-rows: 0.4fr 0.4fr 2.2fr 1.2fr 1fr;
-//     grid-template-areas:
-//       "nav"
-//       "sidebar"
-//       "main"
-//       "content"
-//       "footer";
-//   }
-//   color: white;
-// `;
-// const ContentBox = styled.div`
-//   display: flex;
-//   gap: 0.25rem;
-//   padding: 0.25rem;
-//   align-items: center;
-//   grid-area: content;
-//   justify-content: center;
-//   @media (max-width: 550px) {
-//     flex-direction: column;
-//   }
-// `;

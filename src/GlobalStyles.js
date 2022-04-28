@@ -15,7 +15,7 @@ const GlobalStyles = createGlobalStyle`
     font-size: 14px;
     color: black;
     min-width: 1200px;
-    overflow: scroll
+    overflow-y: scroll
   }
   button {
     all: unset;

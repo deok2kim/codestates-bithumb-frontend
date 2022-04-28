@@ -20,7 +20,7 @@ function CandlestickChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 				<>
 					<Chart
 						height={320}
-						width={800}
+						width={750}
 						type="candlestick"
 						series={[
 							{
@@ -70,7 +70,7 @@ function CandlestickChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 					/>
 					<Chart
 						height={120}
-						width={800}
+						width={750}
 						type="bar"
 						series={[
 							{
@@ -80,12 +80,7 @@ function CandlestickChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 						]}
 						options={{
 							chart: {
-								// height: 50,
 								type: 'bar',
-								// brush: {
-								// 	enabled: true,
-								// 	target: 'candles',
-								// },
 								toolbar: {
 									show: false,
 								},
@@ -103,36 +98,8 @@ function CandlestickChart({ orderCurrency, paymentCurrency, chartIntervals }) {
 							},
 							xaxis: {
 								categories: [''],
-								// position: 'top',
-								// axisBorder: {
-								// 	show: false,
-								// },
-								// axisTicks: {
-								// 	show: false,
-								// },
-								// crosshairs: {
-								// 	fill: {
-								// 		type: 'gradient',
-								// 		gradient: {
-								// 			colorFrom: '#D8E3F0',
-								// 			colorTo: '#BED1E6',
-								// 			stops: [0, 100],
-								// 			opacityFrom: 0.4,
-								// 			opacityTo: 0.5,
-								// 		},
-								// 	},
-								// },
-								// tooltip: {
-								// 	enabled: false,
-								// },
 							},
 							yaxis: {
-								// axisBorder: {
-								// 	show: false,
-								// },
-								// axisTicks: {
-								// 	show: false,
-								// },
 								labels: {
 									show: true,
 									formatter: function (val) {
