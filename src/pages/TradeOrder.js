@@ -1,18 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-import OrderBook from '../components/OrderBook';
-
-import CandlestickChart from '../components/CandlestickChart';
 import { useParams } from 'react-router-dom';
-// import CoinChart from '../components/CoinChart';
-import CoinActiveChart from '../components/CoinActiveCahrt';
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { fetchCoin, fetchOrderBook, fetchTransactionHistory } from '../api';
+
+import CandlestickChart from '../components/CandlestickChart';
+import CoinActiveChart from '../components/CoinActiveCahrt';
 import Loader from '../components/Loader';
 import TransactionContainer from '../components/TransactionContainer';
 import PriceInfoContainer from '../components/PriceInfoContainer';
+import OrderBook from '../components/OrderBook';
+import CoinListTable from '../components/CoinListTable';
+import TRCoinList from '../components/TRCoinList';
 
 function TradeOrder() {
 	const params = useParams();
@@ -44,7 +44,6 @@ function TradeOrder() {
 	let ws = useRef(null);
 
 	const orderSort = useCallback(orderList => {
-		// console.log('orl', orderList);
 		return Object.keys(orderList)
 			.sort((a, b) => a - b)
 			.reduce((newObj, key) => {
@@ -140,7 +139,7 @@ function TradeOrder() {
 	}, [orderCurrency, paymentCurrency, socketConnected]);
 
 	if (transactionHistoryLoading || tickerLoading) {
-		return <Loader type="spin" color="#FE9601" />;
+		return '';
 	}
 	return (
 		<Container>
@@ -153,7 +152,9 @@ function TradeOrder() {
 					chartIntervals="30m"
 				/>
 			</Main>
-			<SideBar />
+			<SideBar>
+				<TRCoinList />
+			</SideBar>
 			<ContentBox>
 				<Content1>
 					{/* 코인 정보 */}
@@ -205,9 +206,7 @@ const Container = styled.div`
 	display: grid;
 	height: 120vh;
 	width: 1200px;
-	/* color: white; */
 	margin: auto;
-	/* grid-template-rows: 1fr 1fr 0.5fr 1fr; */
 	grid-template-rows: 0.2fr 2fr 1.25fr 1.25fr 0.2fr;
 	grid-template-areas:
 		/* 'nav nav nav nav'
@@ -242,12 +241,13 @@ const Main = styled.main`
 	align-items: center;
 `;
 const SideBar = styled.div`
-	background: #9aaab7;
+	/* background: #9aaab7; */
 	grid-area: sidebar;
-	padding: 0.25rem;
-	display: flex;
+	padding: 0.5rem;
+	/* display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: center; */
+	overflow-y: scroll;
 `;
 
 const ContentBox = styled.div`

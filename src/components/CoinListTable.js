@@ -8,15 +8,7 @@ import CoinItem from './CoinItem';
 import { NoCoins } from './Error';
 import { BsArrowUp, BsArrowDown, BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs';
 import { setComma } from './utils';
-function RealPriceTable({
-	mainCategory,
-	coins,
-	nextId,
-	favoriteCoins,
-	toggleFavorite,
-	input,
-	setTarget,
-}) {
+function RealPriceTable({ mainCategory, coins, nextId, favoriteCoins, toggleFavorite, input }) {
 	const [myfavoriteCoins, setMyFavoriteCoins] = useState([]);
 	const [displayCoins, setDisplayCoins] = useState([]);
 	const [searchedCoins, setSearchedCoins] = useState([]);

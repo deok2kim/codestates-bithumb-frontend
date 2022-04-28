@@ -3,3 +3,7 @@ export function setComma(price, point) {
 		maximumFractionDigits: point,
 	});
 }
+
+export function formatMillion(price) {
+	return Math.round(price / 10 ** 7);
+}
