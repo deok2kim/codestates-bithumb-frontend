@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { setComma } from './utils';
 
@@ -6,18 +6,13 @@ const Info = styled.tr`
 	background-color: ${props => (props.ask ? '#eef6ff' : '#fff0ef')};
 	margin: 1rem 0;
 	padding: 1rem 0;
-	span {
-		width: 90px;
-		max-width: 100px;
-	}
 	td:first-child {
 		text-align: end;
 		color: ${props => (props.rate > 0 ? '#f75467' : '#4387F9')};
-
-		span + span {
-			padding-left: 30px;
-		}
 	}
+`;
+const Rate = styled.td`
+	color: ${props => (props.rate > 0 ? '#f75467' : '#4387F9')};
 `;
 
 const Table = styled.table`
@@ -36,40 +31,74 @@ const Table = styled.table`
 		font-weight: 400;
 		text-align: end;
 	}
-
-	tbody: {
-		display: block;
-		overflow: scroll;
-	}
-
-	td + th {
-		td {
-			margin-right: 20px;
-		}
+`;
+const TableHeader = styled.thead``;
+const TableBody = styled.tbody`
+	td {
+		text-align: end;
 	}
 `;
-// TODO: 현재가 대비 퍼센트
-// 마이너스일 떈 파란색으루
+
+const Amount = styled.td`
+	background-color: inherit;
+	position: relative;
+	span {
+		z-index: 1;
+	}
+`;
+
+const Gage = styled.span`
+	display: block;
+	width: ${props => `${props.width}%`};
+	background-color: ${props => props.color};
+	text-align: end;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 0;
+	opacity: 0.5;
+`;
+
 const OrderBook = ({
 	orderbookdepth,
 	orderbookdepthAskList,
 	orderbookdepthBidList,
 	closingPrice,
 }) => {
+	const [maxAmt, setMaxAmt] = useState(1);
 	const getRate = (currentPrice, closingPrice) => {
 		return ((currentPrice - closingPrice) / closingPrice) * 100;
 	};
+	useEffect(() => {
+		setMaxAmt(prev =>
+			Math.max(
+				...Object.values(orderbookdepthAskList)
+					.filter(d => d > 0)
+					.sort((a, b) => b - a)
+					.slice(-12),
+				...Object.values(orderbookdepthBidList)
+					.filter(d => d > 0)
+					.sort((a, b) => b - a)
+					.slice(0, 12),
+			),
+		);
+	}, [orderbookdepthAskList, orderbookdepthBidList]);
 	return (
 		<Table>
-			<thead>
+			<colgroup>
+				<col width="30%" />
+				<col width="30%" />
+				<col width="40%" />
+			</colgroup>
+			<TableHeader>
 				<Info>
-					<th>가격 ({orderbookdepth.symbol.split('_')[1]})</th>
+					<th colSpan={2}>가격 ({orderbookdepth.symbol.split('_')[1]})</th>
 					<th>수량 ({orderbookdepth.symbol.split('_')[0]})</th>
 				</Info>
-			</thead>
-			<tbody>
+			</TableHeader>
+			<TableBody>
 				{Object.entries(orderbookdepthAskList)
-					.filter(o => o[1])
+					.filter(o => o[1] > 0)
 					.sort((a, b) => b[0] - a[0])
 					.slice(-12)
 					.map((orderbookdepthAsk, idx) =>
@@ -79,14 +108,16 @@ const OrderBook = ({
 								rate={getRate(parseFloat(orderbookdepthAsk[0]), parseFloat(closingPrice))}
 								ask={true}
 							>
-								<td>
-									<span>{setComma(parseFloat(orderbookdepthAsk[0]), 4)}</span>
-									<span>
-										{getRate(parseFloat(orderbookdepthAsk[0]), parseFloat(closingPrice)).toFixed(2)}{' '}
-										%
-									</span>
-								</td>
-								<td>{parseFloat(setComma(parseFloat(orderbookdepthAsk[1]), 4)).toFixed(4)}</td>
+								<td>{setComma(parseFloat(orderbookdepthAsk[0]), 4)}</td>
+								<Rate rate={getRate(parseFloat(orderbookdepthAsk[0]), parseFloat(closingPrice))}>
+									{getRate(parseFloat(orderbookdepthAsk[0]), parseFloat(closingPrice)).toFixed(2)} %
+								</Rate>
+								<Amount>
+									{parseFloat(setComma(parseFloat(orderbookdepthAsk[1]), 4)).toFixed(4)}
+									<Gage width={(orderbookdepthAsk[1] / maxAmt) * 100} color="#8fb3eb">
+										&nbsp;
+									</Gage>
+								</Amount>
 							</Info>
 						) : (
 							''
@@ -103,20 +134,22 @@ const OrderBook = ({
 								rate={getRate(parseFloat(orderbookdepthBid[0]), parseFloat(closingPrice))}
 								ask={false}
 							>
-								<td>
-									<span>{setComma(parseFloat(orderbookdepthBid[0]), 4)}</span>
-									<span>
-										{getRate(parseFloat(orderbookdepthBid[0]), parseFloat(closingPrice)).toFixed(2)}
-										%
-									</span>
-								</td>
-								<td>{parseFloat(setComma(parseFloat(orderbookdepthBid[1]), 4)).toFixed(4)}</td>
+								<td>{setComma(parseFloat(orderbookdepthBid[0]), 4)}</td>
+								<Rate rate={getRate(parseFloat(orderbookdepthBid[0]), parseFloat(closingPrice))}>
+									{getRate(parseFloat(orderbookdepthBid[0]), parseFloat(closingPrice)).toFixed(2)} %
+								</Rate>
+								<Amount>
+									{parseFloat(setComma(parseFloat(orderbookdepthBid[1]), 4)).toFixed(4)}
+									<Gage width={(orderbookdepthBid[1] / maxAmt) * 100} color="#efa3ac">
+										&nbsp;
+									</Gage>
+								</Amount>
 							</Info>
 						) : (
 							''
 						),
 					)}
-			</tbody>
+			</TableBody>
 		</Table>
 	);
 };

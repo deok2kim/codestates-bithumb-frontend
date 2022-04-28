@@ -96,7 +96,6 @@ function RealPriceTable({
 			myfavoriteCoins.filter(coin => coinNames[coin.symbol].findName.includes(input.toUpperCase())),
 		);
 	}, [input]);
-	console.log(displayCoins);
 	return (
 		<>
 			<Container>

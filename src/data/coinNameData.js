@@ -821,21 +821,21 @@ export const coinNames = {
 	},
 };
 
-function getCoinNames() {
-	const a = document.querySelectorAll(
-		'#sise_list > tbody > tr > td:nth-child(1) > div > p > a > span',
-	);
-	const b = document.querySelectorAll('#sise_list > tbody > tr > td:nth-child(1) > div > span');
-	const c = document.querySelectorAll(
-		'#sise_list > tbody > tr > td:nth-child(1) > div > p > a > strong',
-	);
+// function getCoinNames() {
+// 	const a = document.querySelectorAll(
+// 		'#sise_list > tbody > tr > td:nth-child(1) > div > p > a > span',
+// 	);
+// 	const b = document.querySelectorAll('#sise_list > tbody > tr > td:nth-child(1) > div > span');
+// 	const c = document.querySelectorAll(
+// 		'#sise_list > tbody > tr > td:nth-child(1) > div > p > a > strong',
+// 	);
 
-	const dict = {};
-	for (let i = 0; i < b.length; ++i) {
-		let symbol = a[i].innerHTML.split('/')[0];
-		let findName = b[i].innerHTML;
-		let koreanName = c[i].innerHTML.split(' <')[0];
-		dict[symbol] = { findName, koreanName };
-	}
-	console.log(dict);
-}
+// 	const dict = {};
+// 	for (let i = 0; i < b.length; ++i) {
+// 		let symbol = a[i].innerHTML.split('/')[0];
+// 		let findName = b[i].innerHTML;
+// 		let koreanName = c[i].innerHTML.split(' <')[0];
+// 		dict[symbol] = { findName, koreanName };
+// 	}
+// 	console.log(dict);
+// }

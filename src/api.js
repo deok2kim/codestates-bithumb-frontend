@@ -15,7 +15,6 @@ export function fetchCoin(orderCurrency, paymentCurrency) {
 }
 
 export function fetchOrderBook(orderCurrency, paymentCurrency) {
-	// console.log(`${BASE_URL}/orderbook/${orderCurrency}_${paymentCurrency}?count=${count}`);
 	return fetch(`${BASE_URL}/orderbook/${orderCurrency}_${paymentCurrency}`).then(res => res.json());
 }
 
