@@ -135,7 +135,7 @@ function RealPriceTable({
 						)}
 				</tbody>
 			</Container>
-			{mainCategory === 'krw' && searchedCoins.length === 0 && (
+			{mainCategory === 'krw' && input && searchedCoins.length === 0 && (
 				<NoCoins msg="찾는 코인이 없습니다.😢" />
 			)}
 			{mainCategory === 'favorite' && myfavoriteCoins.length === 0 && (

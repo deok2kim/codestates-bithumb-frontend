@@ -21,7 +21,7 @@ function CoinList({ coins }) {
 
 	const showMoreItems = useCallback(async () => {
 		setIsLoading(true);
-		await new Promise(resolve => setTimeout(resolve, 2000));
+		await new Promise(resolve => setTimeout(resolve, 500));
 		nextId.current += 10;
 		setIsLoading(false);
 	}, []);
