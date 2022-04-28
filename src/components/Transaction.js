@@ -7,6 +7,19 @@ const Container = styled.div`
 	div {
 		overflow-y: scroll;
 		height: 200px;
+		&::-webkit-scrollbar {
+			width: 10px;
+			height: 10px;
+		}
+		&::-webkit-scrollbar-track {
+			background-color: #fff;
+		}
+		&::-webkit-scrollbar-thumb {
+			background-color: #999;
+			border-radius: 10px;
+			background-clip: padding-box;
+			border: 1px solid transparent;
+		}
 	}
 	p {
 		font-size: 18px;
@@ -20,6 +33,7 @@ const Container = styled.div`
 const Table = styled.table`
 	width: 400px;
 	margin: 15px 0;
+	margin-bottom: 0;
 
 	tr {
 		td:first-child {

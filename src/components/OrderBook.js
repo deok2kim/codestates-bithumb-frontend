@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { setComma } from './utils';
+import ReactLoading from 'react-loading';
 
 const Info = styled.tr`
 	background-color: ${props => (props.ask ? '#eef6ff' : '#fff0ef')};
@@ -59,6 +60,12 @@ const Gage = styled.span`
 	opacity: 0.5;
 `;
 
+const LoaderWrapper = styled.div`
+	width: 270px;
+	display: flex;
+	justify-content: center;
+`;
+
 const OrderBook = ({
 	orderbookdepth,
 	orderbookdepthAskList,
@@ -83,6 +90,13 @@ const OrderBook = ({
 			),
 		);
 	}, [orderbookdepthAskList, orderbookdepthBidList]);
+	if (Object.keys({ ...orderbookdepthAskList, ...orderbookdepthBidList }).length < 20) {
+		return (
+			<LoaderWrapper>
+				<ReactLoading type="spin" color="red" />
+			</LoaderWrapper>
+		);
+	}
 	return (
 		<Table>
 			<colgroup>

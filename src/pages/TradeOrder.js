@@ -14,7 +14,7 @@ import OrderBook from '../components/OrderBook';
 import CoinListTable from '../components/CoinListTable';
 import TRCoinList from '../components/TRCoinList';
 
-import logo from '../images/logo192.png';
+import logo from '../images/logo.png';
 
 function TradeOrder() {
 	const params = useParams();
@@ -78,8 +78,8 @@ function TradeOrder() {
 				if (data.type === 'ticker' && data.content.tickType === '24H') {
 					setTicker(prev => ({
 						...prev,
-						volume: data.content.volume,
-						value: data.content.value,
+						volume24: data.content.volume,
+						value24: data.content.value,
 					}));
 				}
 
@@ -144,10 +144,11 @@ function TradeOrder() {
 		setOrderbookdepthAskList({});
 		setOrderbookdepthBidList({});
 	}, [orderCurrency]);
-
+	console.log(initialTickerData);
 	if (transactionHistoryLoading || tickerLoading) {
 		return '';
 	}
+
 	return (
 		<Container>
 			<NavBar>
@@ -218,32 +219,22 @@ const Container = styled.div`
 	height: 140vh;
 	width: 1200px;
 	margin: auto;
-	grid-template-rows: 0.2fr 2fr 1.25fr 1.25fr 0.2fr;
+	text-align: center;
+	grid-template-rows: 1fr 2.5fr 2.5fr 1fr;
+	grid-template-columns: 1fr 1.2fr 0.8fr;
 	grid-template-areas:
-		/* 'nav nav nav nav'
-		'sidebar main main main'
-		'sidebar content content content'
-		'footer footer footer footer'; */
 		'nav nav nav'
 		'sidebar main main'
 		'sidebar content content'
-		'sidebar content content'
 		'footer footer footer';
-	grid-template-columns: 1fr 1.2fr 0.8fr;
-	text-align: center;
-	/* grid-gap: 0.3rem; */
-	/* min-width: 90%; */
 `;
 
 const NavBar = styled.nav`
-	/* background: #3a3a55; */
 	grid-area: nav;
 	padding: 0.25rem;
 `;
 
 const Main = styled.main`
-	/* background: #1f2128; */
-	/* width: 60%; */
 	color: white;
 	grid-area: main;
 	padding: 1rem;
@@ -252,40 +243,41 @@ const Main = styled.main`
 	align-items: center;
 `;
 const SideBar = styled.div`
-	/* background: #9aaab7; */
 	grid-area: sidebar;
 	padding: 0.5rem;
-	/* display: flex;
-	justify-content: center;
-	align-items: center; */
 	overflow-y: scroll;
+	&::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+	&::-webkit-scrollbar-track {
+		background-color: #fff;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: #999;
+		border-radius: 10px;
+		background-clip: padding-box;
+		border: 1px solid transparent;
+	}
 `;
 
 const ContentBox = styled.div`
 	display: flex;
 	gap: 0.5rem;
-	/* padding: 0.25rem; */
 	align-items: center;
 	grid-area: content;
 	justify-content: space-around;
 `;
 
 const Content1 = styled.div`
-	/* background: #a6b8b9; */
 	padding: 0.25rem;
-	/* width: 100%; */
-	/* height: 600px; */
-	/* overflow-y: scroll; */
 	overflow-x: hidden;
-	/* min-width: 600px; */
 `;
 const Content2 = styled(Content1)``;
 const Footer = styled.footer`
-	/* background: #ff9637; */
 	grid-area: footer;
 	padding: 0.25rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	/* height: 100px; */
 `;

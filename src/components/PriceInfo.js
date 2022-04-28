@@ -66,8 +66,8 @@ const PriceInfo = ({ coinInfo }) => {
 		lowPrice,
 		volumePower,
 		prevClosePrice,
-		volume,
-		value,
+		volume24,
+		value24,
 		closePrice,
 	} = coinInfo;
 	return (
@@ -81,14 +81,14 @@ const PriceInfo = ({ coinInfo }) => {
 					<tr>
 						<th>거래량(24h)</th>
 						<td>
-							{setComma(parseFloat(volume), 0)} {symbol.split('_')[0]}
+							{setComma(parseFloat(volume24), 0)} {symbol.split('_')[0]}
 						</td>
 						<th>고가(당일)</th>
 						<td>{setComma(parseInt(highPrice), 4)}</td>
 					</tr>
 					<tr>
 						<th>거래금액(24h)</th>
-						<td>{setComma(value / 100000000, 1)} 억</td>
+						<td>{setComma(value24 / 100000000, 1)} 억</td>
 
 						<th>저가(당일)</th>
 						<td>{setComma(parseInt(lowPrice), 4)}</td>
