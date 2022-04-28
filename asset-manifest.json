@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/codestates-bithumb-frontend/static/js/main.f6afff76.js",
+    "main.js": "/codestates-bithumb-frontend/static/js/main.46adc43e.js",
     "index.html": "/codestates-bithumb-frontend/index.html",
-    "main.f6afff76.js.map": "/codestates-bithumb-frontend/static/js/main.f6afff76.js.map"
+    "main.46adc43e.js.map": "/codestates-bithumb-frontend/static/js/main.46adc43e.js.map"
   },
   "entrypoints": [
-    "static/js/main.f6afff76.js"
+    "static/js/main.46adc43e.js"
   ]
 }
