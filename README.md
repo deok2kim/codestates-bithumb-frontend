@@ -1,5 +1,7 @@
 # Getting Started with APP
-![Finish](https://user-images.githubusercontent.com/52899349/161270669-fa9e9a32-9b3e-4f50-94b9-08548a0bb6c1.gif)
+
+![0429프로젝트GIF1](https://user-images.githubusercontent.com/52899349/165930367-5e027fcd-43ed-4a97-84b0-2124d41fc508.gif)
+![0429프로젝트GIF2](https://user-images.githubusercontent.com/52899349/165930394-6c5b21bd-a653-4cab-a949-5e0a0a2a3fb4.gif)
 
 [프로젝트 링크](https://deok2kim.github.io/codestates-bithumb-frontend/)
 
@@ -38,6 +40,14 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 6. `코인 즐겨찾기`
 7. `코인 목록 인피니티 스크롤`
 8. `코인 검색`
+
+## 구현 방법 및 구현하면서 어려웠던 점
+1. 웹소켓으로 받아오는 가격은 초기에 많지 않아서 데이터가 가득한 화면을 보여주기 어렵기 때문에 API로 초기 데이터를 가져오려고했으나 오더북 데이터가 CORS문제가 발생해서 가져오지 못함.
+2. 무한스크롤 부분을 따로따로 구현하지 않아서 즐겨찾기에서는 사용하지 못함
+3. 디자인 능력의 한계로 반응형을 적용해서 그리드는 잘 됐으나 컨텐츠가 엉망이 돼서 다시 원상복구함
+
+## 프로토타입
+![image](https://user-images.githubusercontent.com/52899349/165931708-ba2f8f0d-fb4e-4a71-b350-015079aae9eb.png)
 
 ## 성능 최적화에 대해서 고민하고 개선한 방법
 
